@@ -1,0 +1,11 @@
+{
+  "name": "overprint",
+  "version": "0.0.1",
+  "description": "Terminal emulator using HTML Canvas",
+  "main": "terminal.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Rickerby",
+  "license": "MIT"
+}
