@@ -2,6 +2,13 @@
 <script src="terminal.js"></script>
 <script>
 var canvas = document.getElementById("demo");
-var terminal = new Overprint.Terminal(800, 600, canvas);
+var terminal = new Overprint.Terminal(80, 46, canvas);
 terminal.render();
+
+terminal.writeGlyph(40, 40, Overprint.Glyph("!", "#f00"));
+terminal.writeGlyph(41, 40, Overprint.Glyph("!", "#f00"));
+terminal.writeGlyph(42, 40, Overprint.Glyph("!", "#f00"));
+
+terminal.render();
+
 </script>
