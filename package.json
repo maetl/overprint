@@ -1,7 +1,7 @@
 {
   "name": "overprint",
-  "version": "0.0.1",
-  "description": "Terminal emulator using HTML Canvas",
+  "version": "0.0.2",
+  "description": "A toolkit for rendering ASCII tilemaps with HTML canvas",
   "main": "terminal.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,3 +1,3 @@
-= Overprint
+# Overprint
 
-Terminal emulator using HTML Canvas.
+A toolkit for rendering ASCII tilemaps with HTML canvas.
