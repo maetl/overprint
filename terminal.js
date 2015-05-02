@@ -36,9 +36,9 @@ Overprint.Terminal = function(width, height, canvas) {
 }
 
 Overprint.Terminal.prototype.clear = function() {
-	for (var row=0; row<this._width; row++) {
-		for (var col=0; col<this._height; col++) {
-			this._display.setCell(row, col, Overprint.Glyph());
+	for (var col=0; col<this._width; col++) {
+		for (var row=0; row<this._height; row++) {
+			this._display.setCell(col, row, Overprint.Glyph());
 		}
 	}
 }
@@ -63,10 +63,10 @@ Overprint.Terminal.prototype.render = function() {
 Overprint.DisplayState = function(width, height, cell) {
 	function fillArray2D(width, height, fill) {
 		var list = new Array(width);
-		for (var row=0; row<width; row++) {
-			list[row] = new Array(height);
-			for (var col=0; col<height; col++) {
-				list[row][col] = fill;
+		for (var col=0; col<width; col++) {
+			list[col] = new Array(height);
+			for (var row=0; row<height; row++) {
+				list[col][row] = fill;
 			}
 		}
 		return list;
@@ -96,16 +96,16 @@ Overprint.DisplayState.prototype.setCell = function(x, y, cell) {
 }
 
 Overprint.DisplayState.prototype.render = function(callback) {
-	for (var row=0; row<this._width; row++) {
-		for (var col=0; col<this._height; col++) {
-			var cell = this._updatedCells[row][col];
+	for (var col=0; col<this._width; col++) {
+		for (var row=0; row<this._height; row++) {
+			var cell = this._updatedCells[col][row];
 
 			if (cell == null) continue;
 
-			callback(row, col, cell);
+			callback(col, row, cell);
 
-			this._renderedCells[row][col] = cell;
-			this._updatedCells[row][col] = null;
+			this._renderedCells[col][row] = cell;
+			this._updatedCells[col][row] = null;
 		}
 	}
 }
