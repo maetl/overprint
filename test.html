@@ -2,12 +2,32 @@
 <script src="terminal.js"></script>
 <script>
 var canvas = document.getElementById("demo");
-var terminal = new Overprint.Terminal(80, 46, canvas);
+var terminal = new Overprint.Terminal(40, 30, canvas);
 terminal.render();
 
-terminal.writeGlyph(40, 40, Overprint.Glyph("!", "#f00"));
-terminal.writeGlyph(41, 40, Overprint.Glyph("!", "#f00"));
-terminal.writeGlyph(42, 40, Overprint.Glyph("!", "#f00", "#333"));
+terminal.writeGlyph(19, 19, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(19, 20, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(19, 21, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(19, 22, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(19, 23, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(20, 19, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(21, 19, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(22, 19, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(20, 20, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(20, 21, Overprint.Glyph("@", "#fff"));
+terminal.writeGlyph(20, 22, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(20, 23, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(21, 20, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(21, 21, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(21, 22, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(21, 23, Overprint.Glyph(".", "#ccc"));
+terminal.writeGlyph(22, 20, Overprint.Glyph("#", "#fff", "#444"));
+terminal.writeGlyph(22, 21, Overprint.Glyph("#", "#fff", "#444"));
+terminal.writeGlyph(22, 22, Overprint.Glyph("#", "#fff", "#444"));
+terminal.writeGlyph(22, 23, Overprint.Glyph("#", "#fff", "#444"));
+terminal.writeGlyph(23, 23, Overprint.Glyph("#", "#fff", "#444"));
+terminal.writeGlyph(24, 23, Overprint.Glyph("#", "#fff", "#444"));
+terminal.writeGlyph(25, 23, Overprint.Glyph("#", "#fff", "#444"));
 
 terminal.render();
 

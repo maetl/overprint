@@ -8,8 +8,8 @@ var Overprint = {
 		WHITE: '#fff'
 	},
 	Cell: {
-		WIDTH: 14,
-		HEIGHT: 14
+		WIDTH: 18,
+		HEIGHT: 18
 	}
 };
 
@@ -31,6 +31,11 @@ Overprint.Terminal = function(width, height, canvas) {
 	canvas.height = Overprint.Cell.HEIGHT * this._height;
 
 	this._context = canvas.getContext('2d');
+
+	// TODO: make this configurable
+	this._context.font = 'normal 18px inconsolata';
+	this._context.textAlign = 'center';
+	this._context.textBaseline = 'middle';
 
 	this._display = new Overprint.DisplayState(width, height, cell);
 }
@@ -55,8 +60,10 @@ Overprint.Terminal.prototype.render = function() {
 		this._context.fillStyle = glyph.bgColor;
 		this._context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 
+		if (glyph.char == Overprint.Char.NULL) return;
+
 		this._context.fillStyle = glyph.color;
-		this._context.fillText(glyph.char, x * cellWidth, y * cellHeight);
+		this._context.fillText(glyph.char, (x+0.5) * cellWidth, Math.ceil((y+0.5) * cellHeight));
 	}.bind(this));
 }
 
