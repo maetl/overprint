@@ -21,9 +21,20 @@ Overprint.Glyph = function(character, color, bgColor) {
 	}
 }
 
-Overprint.Terminal = function(width, height, canvas) {
+Overprint.Font = function(family, weight) {
+	return font = {
+		family: family,
+		weight: weight,
+		toCSS: function() {
+			return weight + ' 18px ' + family;
+		}
+	}
+}
+
+Overprint.Terminal = function(width, height, canvas, font) {
 	this._width = width;
 	this._height = height;
+	this._font = font || Overprint.Font('inconsolata', 'normal');
 
 	var cell = this._emptyCell = Overprint.Glyph();
 
@@ -32,8 +43,7 @@ Overprint.Terminal = function(width, height, canvas) {
 
 	this._context = canvas.getContext('2d');
 
-	// TODO: make this configurable
-	this._context.font = 'normal 18px inconsolata';
+	this._context.font = this._font.toCSS();
 	this._context.textAlign = 'center';
 	this._context.textBaseline = 'middle';
 
