@@ -1,6 +1,6 @@
 {
   "name": "overprint",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A toolkit for rendering ASCII tilemaps with HTML canvas",
   "main": "terminal.js",
   "scripts": {
