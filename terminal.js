@@ -50,10 +50,11 @@ Overprint.Terminal = function(width, height, canvas, font) {
 	this._display = new Overprint.DisplayState(width, height, cell);
 }
 
-Overprint.Terminal.prototype.clear = function() {
+Overprint.Terminal.prototype.clear = function(glyph) {
+	var bgGlyph = glyph ? glyph : Overprint.Glyph();
 	for (var col=0; col<this._width; col++) {
 		for (var row=0; row<this._height; row++) {
-			this._display.setCell(col, row, Overprint.Glyph());
+			this._display.setCell(col, row, bgGlyph);
 		}
 	}
 }
