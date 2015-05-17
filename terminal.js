@@ -36,13 +36,13 @@ Overprint.Terminal = function(width, height, canvas, font) {
 
 	this._context = this._canvas.getContext('2d');
 
-	this.resize();
+	this.resetLayout();
 
 	var cell = this._emptyCell = Overprint.Glyph();
 	this._display = new Overprint.DisplayState(width, height, cell);
 }
 
-Overprint.Terminal.prototype.resize = function() {
+Overprint.Terminal.prototype.resetLayout = function() {
 	if (!this._canvas.style.width) this._canvas.style.width = 640;
 	if (!this._canvas.style.height) this._canvas.style.height = 480;
 
@@ -69,6 +69,10 @@ Overprint.Terminal.prototype.clear = function(glyph) {
 			this._display.setCell(col, row, bgGlyph);
 		}
 	}
+}
+
+Overprint.Terminal.prototype.fill = function(glyph) {
+	this.clear(glyph);
 }
 
 Overprint.Terminal.prototype.writeGlyph = function(x, y, glyph) {

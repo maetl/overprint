@@ -3,6 +3,13 @@
 <script src="../terminal.js"></script>
 <script>
 var canvas = document.getElementById("demo");
+canvas.style.width = document.documentElement.clientWidth;
+canvas.style.height = document.documentElement.clientHeight;
+canvas.style.margin = '0px';
+canvas.style.padding = '0px';
+document.body.style.margin = '0px';
+document.body.style.padding = '0px';
+
 var terminal = new Overprint.Terminal(40, 30, canvas);
 terminal.render();
 
