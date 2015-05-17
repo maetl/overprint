@@ -1,8 +1,8 @@
 {
   "name": "overprint",
-  "version": "0.0.6",
-  "description": "A toolkit for rendering ASCII tilemaps with HTML canvas",
-  "main": "terminal.js",
+  "version": "0.1.0",
+  "description": "A toolkit for rendering grids and maps using the HTML Canvas API",
+  "main": "overprint.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
