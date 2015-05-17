@@ -6,10 +6,6 @@ var Overprint = {
 	Color: {
 		BLACK: '#000',
 		WHITE: '#fff'
-	},
-	Cell: {
-		WIDTH: 18,
-		HEIGHT: 18
 	}
 };
 
@@ -25,7 +21,7 @@ Overprint.Font = function(family, weight, size) {
 	return {
 		family: family,
 		weight: weight,
-		size: size || 18,
+		size: size,
 		toCSS: function() {
 			return this.weight + ' '+ this.size +'px ' + this.family;
 		}
@@ -39,8 +35,6 @@ Overprint.Terminal = function(width, height, canvas, font) {
 	this._font = font || Overprint.Font('inconsolata', 'normal');
 
 	this._context = this._canvas.getContext('2d');
-	this._context.textAlign = 'center';
-	this._context.textBaseline = 'middle';
 
 	this.resize();
 
@@ -49,24 +43,23 @@ Overprint.Terminal = function(width, height, canvas, font) {
 }
 
 Overprint.Terminal.prototype.resize = function() {
-	if (!this._canvas.style.width) this._canvas.style.width = 800;
-	if (!this._canvas.style.height) this._canvas.style.height = 600;
+	if (!this._canvas.style.width) this._canvas.style.width = 640;
+	if (!this._canvas.style.height) this._canvas.style.height = 480;
 
 	var elementWidth = parseInt(this._canvas.style.width, 10);
 	var elementHeight = parseInt(this._canvas.style.height, 10);
 
+	this._canvas.width = elementWidth;
+	this._canvas.height = elementHeight;
+
 	this._cellWidth = Math.floor(elementWidth / this._width);
 	this._cellHeight = Math.floor(elementHeight / this._height);
 
-	console.log(this._font.toCSS());
-
 	this._font.size = this._cellWidth;
+
 	this._context.font = this._font.toCSS();
-
-	console.log(this._font.toCSS());
-
-	this._canvas.width = elementWidth;
-	this._canvas.height = elementHeight;
+	this._context.textAlign = 'center';
+	this._context.textBaseline = 'middle';
 }
 
 Overprint.Terminal.prototype.clear = function(glyph) {
@@ -83,21 +76,20 @@ Overprint.Terminal.prototype.writeGlyph = function(x, y, glyph) {
 }
 
 Overprint.Terminal.prototype.render = function() {
-	//var cellWidth = Overprint.Cell.WIDTH;
-	//var cellHeight = Overprint.Cell.HEIGHT;
-	var cellWidth = this._cellWidth;
-	var cellHeight = this._cellHeight;
-
 	this._display.render(function(x, y, glyph){
+		var cellWidth = this._cellWidth;
+		var cellHeight = this._cellHeight;
+
 		this._context.fillStyle = glyph.bgColor;
 		this._context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 
 		if (glyph.char == Overprint.Char.NULL) return;
-		
-		this._context.font = this._font.toCSS();
 
 		this._context.fillStyle = glyph.color;
-		this._context.fillText(glyph.char, (x+0.1) * cellWidth, Math.ceil((y+0.8) * cellHeight));
+
+		var xPos = (x * cellWidth) + cellWidth / 2;
+		var yPos = (y * cellHeight) + cellHeight / 2;
+		this._context.fillText(glyph.char, xPos, yPos);
 	}.bind(this));
 }
 
