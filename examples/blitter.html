@@ -1,0 +1,63 @@
+<meta http-equiv="content-type" charset="utf-8">
+<canvas id="demo"></canvas>
+<script src="terminal.js"></script>
+<script>
+
+var swatches = [
+	['#E22A3F', '#B96D63', '#32AF94', '#324249', '#2AA6E2'],
+	['#52414C', '#596157', '#5B8C5A', '#CFD186', '#E3655B'],
+	['#54457F', '#AC7B84', '#4C243B', '#B84A62', '#F5A6E6'],
+	['#F0BA61', '#F48244', '#D55437', '#EF4640', '#C13936'],
+	['#CAE7B9', '#F3DE8A', '#EB9486', '#7E7F9A', '#97A7B3'],
+	["#00ebb2", "#00c595", "#00a17a", "#138770"]
+];
+
+function pickColor() {
+	return swatches[Math.floor(Math.random() * swatches.length)];
+}
+
+var colors = pickColor();
+
+var canvas = document.getElementById("demo");
+var defaultGlyph = Overprint.Glyph(Overprint.Char.NULL, 'black', '#ccc');
+
+var vWidth = document.documentElement.clientWidth;
+var vHeight = document.documentElement.clientHeight;
+
+document.body.style.margin = '0px';
+
+canvas.style.margin = '0px';
+canvas.style.width = vWidth.toString() + "px";
+canvas.style.height = vHeight.toString() + "px";
+
+var width = 72;
+var height = 40;
+
+var terminal = new Overprint.Terminal(width, height, canvas);
+
+terminal.clear(defaultGlyph);
+
+function renderRandomTiles() {
+	var blitter = Math.floor(Math.random() * 12);
+	for (var i = 0; i < blitter; i++) {
+		var xPos = Math.floor(Math.random() * width);
+		var yPos = Math.floor(Math.random() * height);
+		var color = colors[Math.floor(Math.random() * colors.length)];
+		var glyph = Overprint.Glyph(Overprint.Char.NULL, 'black', color);
+
+		terminal.writeGlyph(xPos, yPos, glyph);
+	}
+	
+	terminal.render();
+
+	window.requestAnimationFrame(renderRandomTiles);
+}
+
+window.requestAnimationFrame(renderRandomTiles);
+
+canvas.onmousedown = function(ev) {
+	colors = pickColor();
+	terminal.clear(defaultGlyph);
+}
+
+</script>
