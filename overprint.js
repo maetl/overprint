@@ -114,6 +114,77 @@ Overprint.Terminal.prototype.render = function() {
 	}.bind(this));
 }
 
+Overprint.Trigrid = function(width, height, canvas) {
+	this._width = width;
+	this._height = height;
+	this._canvas = canvas;
+
+	this._context = this._canvas.getContext('2d');
+
+	this.resetLayout();
+
+	var cell = this._emptyCell = Overprint.Glyph();
+	this._display = new Overprint.DisplayState(width, height, cell);	
+}
+
+Overprint.Trigrid.prototype.resetLayout = function() {
+	if (!this._canvas.style.width) this._canvas.style.width = 640;
+	if (!this._canvas.style.height) this._canvas.style.height = 480;
+
+	var elementWidth = parseInt(this._canvas.style.width, 10);
+	var elementHeight = parseInt(this._canvas.style.height, 10);
+
+	this._canvas.width = elementWidth;
+	this._canvas.height = elementHeight;
+
+	this._cellWidth = Math.floor(elementWidth / this._width);
+	this._cellHeight = Math.floor(elementHeight / this._height);
+}
+
+// TODO: +api work out the best value obj structure to pass here instead of glyph
+Overprint.Trigrid.prototype.writeCell = function(x, y, glyph) {
+	this._display.setCell(x, y, glyph);
+}
+
+Overprint.Trigrid.prototype.render = function() {
+	this._display.render(function(x, y, glyph){
+		var cellWidth = this._cellWidth;
+		var cellHeight = this._cellHeight;
+
+		if (x == 0) {
+			var apexY = y * cellHeight;
+			var baseY = (y * cellHeight) + cellHeight;
+			var apexX = (x * cellWidth) + (cellWidth / 2);
+			var baseX1 = (x * cellWidth);
+			var baseX2 = (x * cellWidth) + cellWidth;
+
+		} else if ((x % 2) == 0) {
+			var apexY = y * cellHeight;
+			var baseY = (y * cellHeight) + cellHeight;
+			var apexX = (x * cellWidth) + (cellWidth / 2);
+			var baseX1 = (x * cellWidth);
+			var baseX2 = (x * cellWidth) + cellWidth;
+
+		} else {
+			var apexY = y * cellHeight;
+			var baseY = (y * cellHeight) + cellHeight;
+			var apexX = (x * cellWidth) + (cellWidth / 2);
+			var baseX1 = (x * cellWidth);
+			var baseX2 = (x * cellWidth) + cellWidth;
+		}
+		
+		//this._context.fillStyle = glyph.bgColor;
+
+		this._context.moveTo(apexX, apexY);
+		this._context.lineTo(baseX1, baseY);
+		this._context.lineTo(baseX2, baseY);
+		this._context.fill();
+
+		if (glyph.char == Overprint.Char.NULL) return;
+		// Text not rendered for this grid type (yet)
+	}.bind(this));
+}
+
 Overprint.DisplayState = function(width, height, cell) {
 	function fillArray2D(width, height, fill) {
 		var list = new Array(width);
