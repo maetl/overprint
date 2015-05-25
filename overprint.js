@@ -9,6 +9,23 @@ var Overprint = {
 	}
 };
 
+Overprint.Char.AMPERSAND = '&';
+Overprint.Char.DOT = '.';
+Overprint.Char.FULL_STOP = '.';
+Overprint.Char.PLUS = '+';
+Overprint.Char.MINUS = '-';
+Overprint.Char.HASH = '#';
+Overprint.Char.DOLLAR = '$';
+Overprint.Char.PERCENT = '%';
+Overprint.Char.CARET = '^';
+Overprint.Char.ASTERISK = '*';
+Overprint.Char.TILDE = '~';
+Overprint.Char.LEFT_PARENS = '(';
+Overprint.Char.RIGHT_PARENS = ')';
+Overprint.Char.LEFT_BRACKET = '[';
+Overprint.Char.RIGHT_BRACKET = ']';
+Overprint.Char.AT = '@';
+
 Overprint.Glyph = function(character, color, bgColor) {
 	return {
 		char: character || Overprint.Char.NULL,
