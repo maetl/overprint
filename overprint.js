@@ -137,8 +137,8 @@ Overprint.Trigrid.prototype.resetLayout = function() {
 	this._canvas.width = elementWidth;
 	this._canvas.height = elementHeight;
 
-	this._cellWidth = Math.floor(elementWidth / this._width);
-	this._cellHeight = Math.floor(elementHeight / this._height);
+	this._cellWidth = elementWidth / this._width;
+	this._cellHeight = elementHeight / this._height;
 }
 
 // TODO: +api work out the best value obj structure to pass here instead of glyph
@@ -151,33 +151,35 @@ Overprint.Trigrid.prototype.render = function() {
 		var cellWidth = this._cellWidth;
 		var cellHeight = this._cellHeight;
 
-		if (x == 0) {
-			var apexY = y * cellHeight;
-			var baseY = (y * cellHeight) + cellHeight;
-			var apexX = (x * cellWidth) + (cellWidth / 2);
-			var baseX1 = (x * cellWidth);
-			var baseX2 = (x * cellWidth) + cellWidth;
+		var cellHalfWidth = cellWidth / 2;
 
-		} else if ((x % 2) == 0) {
-			var apexY = y * cellHeight;
-			var baseY = (y * cellHeight) + cellHeight;
-			var apexX = (x * cellWidth) + (cellWidth / 2);
-			var baseX1 = (x * cellWidth);
-			var baseX2 = (x * cellWidth) + cellWidth;
+		var yFloor = y * cellHeight;
+		var yCeil = (y * cellHeight) + cellHeight;
 
-		} else {
-			var apexY = y * cellHeight;
-			var baseY = (y * cellHeight) + cellHeight;
-			var apexX = (x * cellWidth) + (cellWidth / 2);
-			var baseX1 = (x * cellWidth);
-			var baseX2 = (x * cellWidth) + cellWidth;
-		}
-		
+		var yVertex = yFloor;
+		var yBase = yCeil;
+		var xVertex = x * cellWidth;
+		var xBaseFloor = xVertex;
+		var xBaseCeil = xVertex + cellWidth;
+
+		var bgColor = '#f90';
+
+		this._context.fillStyle = bgColor;
 		//this._context.fillStyle = glyph.bgColor;
+		this._context.beginPath();
+		this._context.moveTo(xVertex, yVertex);
+		this._context.lineTo(xBaseFloor, yBase);
+		this._context.lineTo(xBaseCeil, yBase);
+		this._context.fill();
 
-		this._context.moveTo(apexX, apexY);
-		this._context.lineTo(baseX1, baseY);
-		this._context.lineTo(baseX2, baseY);
+		var bgColor = '#fc0';
+
+		this._context.fillStyle = bgColor;
+		//this._context.fillStyle = glyph.bgColor;
+		this._context.beginPath();
+		this._context.moveTo(xVertex, yVertex);
+		this._context.lineTo(xBaseCeil, yFloor);
+		this._context.lineTo(xBaseCeil, yCeil);
 		this._context.fill();
 
 		if (glyph.char == Overprint.Char.NULL) return;
