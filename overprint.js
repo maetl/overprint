@@ -96,6 +96,17 @@ Overprint.Terminal.prototype.writeGlyph = function(x, y, glyph) {
 	this._display.setCell(x, y, glyph);
 }
 
+Overprint.Terminal.prototype.writeText = function(x, y, text) {
+	var cursorPosition = 0;
+	var endPosition = this._width - x;
+
+	while (cursorPosition <= endPosition) {
+		var textGlyph = Overprint.Glyph(text[cursorPosition]);
+		this._display.setCell(cursorPosition + x, y, textGlyph);
+		cursorPosition++;
+	}
+}
+
 Overprint.Terminal.prototype.render = function() {
 	this._display.render(function(x, y, glyph){
 		var cellWidth = this._cellWidth;
@@ -162,25 +173,27 @@ Overprint.Trigrid.prototype.render = function() {
 		var xBaseFloor = xVertex;
 		var xBaseCeil = xVertex + cellWidth;
 
-		var bgColor = '#f90';
-
-		this._context.fillStyle = bgColor;
-		//this._context.fillStyle = glyph.bgColor;
+		this._context.fillStyle = glyph.bgColor;
 		this._context.beginPath();
 		this._context.moveTo(xVertex, yVertex);
 		this._context.lineTo(xBaseFloor, yBase);
 		this._context.lineTo(xBaseCeil, yBase);
 		this._context.fill();
+		this._context.lineWidth = 1;
+		this._context.closePath();
+		this._context.strokeStyle = glyph.bgColor;
+		this._context.stroke();
 
-		var bgColor = '#fc0';
-
-		this._context.fillStyle = bgColor;
-		//this._context.fillStyle = glyph.bgColor;
+		this._context.fillStyle = glyph.bgColor;
 		this._context.beginPath();
 		this._context.moveTo(xVertex, yVertex);
 		this._context.lineTo(xBaseCeil, yFloor);
 		this._context.lineTo(xBaseCeil, yCeil);
 		this._context.fill();
+		this._context.lineWidth = 1;
+		this._context.closePath();
+		this._context.strokeStyle = glyph.bgColor;
+		this._context.stroke();
 
 		if (glyph.char == Overprint.Char.NULL) return;
 		// Text not rendered for this grid type (yet)
