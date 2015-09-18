@@ -1,6 +1,6 @@
 <meta http-equiv="content-type" charset="utf-8">
 <canvas id="demo"></canvas>
-<script src="terminal.js"></script>
+<script src="../overprint.js"></script>
 <script>
 
 var swatches = [
@@ -13,7 +13,8 @@ var swatches = [
 ];
 
 function pickColor() {
-	return swatches[Math.floor(Math.random() * swatches.length)];
+	//return swatches[Math.floor(Math.random() * swatches.length)];
+	return ['#B96D63'];
 }
 
 var colors = pickColor();

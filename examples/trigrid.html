@@ -11,6 +11,10 @@ document.body.style.margin = '0px';
 document.body.style.padding = '0px';
 
 var grid = new Overprint.Trigrid(10, 8, canvas);
+
+grid.writeCell(5, 5, Overprint.Glyph(Overprint.Char.NULL, 'black', '#fc0'));
+grid.writeCell(5, 6, Overprint.Glyph(Overprint.Char.NULL, 'black', '#f90'));
+
 grid.render();
 
 </script>
