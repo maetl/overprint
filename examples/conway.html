@@ -14,7 +14,7 @@ var swatches = [
 
 function pickColor() {
 	//return swatches[Math.floor(Math.random() * swatches.length)];
-	return ['#B96D63'];
+	return ['#D55437', '#EF4640', '#C13936'];
 }
 
 var colors = pickColor();
@@ -31,10 +31,11 @@ canvas.style.margin = '0px';
 canvas.style.width = vWidth.toString() + "px";
 canvas.style.height = vHeight.toString() + "px";
 
-var columns = 36;
-var rows = 20;
+var columns = 40;
+var rows = 30;
 
-var terminal = new Overprint.Terminal(columns, rows, canvas);
+//var terminal = new Overprint.Terminal(columns, rows, canvas);
+var terminal = new Overprint.Hexgrid(columns, rows, canvas);
 
 terminal.clear(defaultGlyph);
 
@@ -44,7 +45,9 @@ for (var x=0; x < columns; x++) {
 	currentState[x] = [];
 	for (var y=0; y < rows; y++) {
 		currentState[x][y] = Math.floor(Math.random() * 2);
-		//currentState[x][y] = 0;
+		if (y == 20 || y == 21) {
+			currentState[x][y] = 1;
+		}
 	}
 }
 
@@ -97,16 +100,16 @@ var alive = function() {
 var color = colors[Math.floor(Math.random() * colors.length)];
 //var alive = Overprint.Glyph(Overprint.Char.NULL, 'black', color);
 
-var dead = Overprint.Glyph(Overprint.Char.NULL, 'black', '#ccc');
+var dead = Overprint.Glyph(Overprint.Char.NULL, 'black', '#F0BA61');
 
 function renderTiles() {
 	for (var x = 0; x < columns; x++) {
 		for (var y = 0; y < rows; y++) {
 			var glyph = currentState[x][y] ? alive() : dead;
-			terminal.writeGlyph(x, y, glyph);
+			terminal.writeCell(x, y, glyph);
 		}
 	}
-	
+
 	terminal.render();
 
 	nextGeneration();
@@ -114,7 +117,7 @@ function renderTiles() {
 	//window.requestAnimationFrame(renderTiles);
 }
 
-setInterval(renderTiles, 120);
+setInterval(renderTiles, 180);
 
 //window.requestAnimationFrame(renderTiles);
 

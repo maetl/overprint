@@ -33,7 +33,8 @@ canvas.style.height = vHeight.toString() + "px";
 var width = 72;
 var height = 40;
 
-var terminal = new Overprint.Terminal(width, height, canvas);
+//var terminal = new Overprint.Terminal(width, height, canvas);
+var terminal = new Overprint.Hexgrid(width, height, canvas);
 
 terminal.clear(defaultGlyph);
 
@@ -45,7 +46,7 @@ function renderRandomTiles() {
 		var color = colors[Math.floor(Math.random() * colors.length)];
 		var glyph = Overprint.Glyph(Overprint.Char.NULL, 'black', color);
 
-		terminal.writeGlyph(xPos, yPos, glyph);
+		terminal.writeCell(xPos, yPos, glyph);
 	}
 	
 	terminal.render();
