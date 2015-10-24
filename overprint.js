@@ -1,7 +1,7 @@
 var Overprint = {
 	Char: {
 		NULL: ' ',
-		SPACE: ' '	
+		SPACE: ' '
 	},
 	Color: {
 		BLACK: '#000',
@@ -53,6 +53,8 @@ Overprint.Terminal = function(width, height, canvas, font) {
 
 	this._context = this._canvas.getContext('2d');
 
+	this._ratio = window.devicePixelRatio || 1;
+
 	this.resetLayout();
 
 	var cell = this._emptyCell = Overprint.Glyph();
@@ -63,8 +65,8 @@ Overprint.Terminal.prototype.resetLayout = function() {
 	if (!this._canvas.style.width) this._canvas.style.width = 640;
 	if (!this._canvas.style.height) this._canvas.style.height = 480;
 
-	var elementWidth = parseInt(this._canvas.style.width, 10);
-	var elementHeight = parseInt(this._canvas.style.height, 10);
+	var elementWidth = parseInt(this._canvas.style.width, 10)  * this._ratio;
+	var elementHeight = parseInt(this._canvas.style.height, 10) * this._ratio;
 
 	this._canvas.width = elementWidth;
 	this._canvas.height = elementHeight;
@@ -132,6 +134,8 @@ Overprint.Hexgrid = function(width, height, canvas) {
 
 	this._context = this._canvas.getContext('2d');
 
+	this._ratio = window.devicePixelRatio || 1;
+
 	this.resetLayout();
 
 	var cell = this._emptyCell = Overprint.Glyph();
@@ -142,14 +146,15 @@ Overprint.Hexgrid.prototype.resetLayout = function() {
 	if (!this._canvas.style.width) this._canvas.style.width = 640;
 	if (!this._canvas.style.height) this._canvas.style.height = 480;
 
-	var elementWidth = parseInt(this._canvas.style.width, 10);
-	var elementHeight = parseInt(this._canvas.style.height, 10);
+	var elementWidth = parseInt(this._canvas.style.width, 10) * this._ratio;
+	var elementHeight = parseInt(this._canvas.style.height, 10) * this._ratio;
 
 	this._canvas.width = elementWidth;
 	this._canvas.height = elementHeight;
 
-	// this._cellWidth = elementWidth / this._width;
-	// this._cellHeight = elementHeight / this._height;
+	// TODO: support a hex grid coordinate system
+	//this._cellWidth = elementWidth / this._width / 2;
+	//this._cellHeight = elementHeight / this._height / 2;
 	this._cellWidth = 16;
 	this._cellHeight = 16;
 }
@@ -221,7 +226,7 @@ Overprint.Trigrid = function(width, height, canvas) {
 	this.resetLayout();
 
 	var cell = this._emptyCell = Overprint.Glyph();
-	this._display = new Overprint.DisplayState(width, height, cell);	
+	this._display = new Overprint.DisplayState(width, height, cell);
 }
 
 Overprint.Trigrid.prototype.resetLayout = function() {
