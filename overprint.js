@@ -253,41 +253,45 @@ Overprint.Trigrid.prototype.render = function() {
 		var cellWidth = this._cellWidth;
 		var cellHeight = this._cellHeight;
 
-		var cellHalfWidth = cellWidth / 2;
+		var sideLength = (cellWidth > cellHeight) ? cellWidth : cellHeight;
 
-		var yFloor = y * cellHeight;
-		var yCeil = (y * cellHeight) + cellHeight;
+		var widthRadius = sideLength * Math.cos(60 * Math.PI / 180) + sideLength * 0.5;
+		var heightRadius = sideLength * Math.sin(60 * Math.PI / 180);
+		var halfSize = sideLength * 0.5;
 
-		var yVertex = yFloor;
-		var yBase = yCeil;
-		var xVertex = x * cellWidth;
-		var xBaseFloor = xVertex;
-		var xBaseCeil = xVertex + cellWidth;
-
+		// See: http://stackoverflow.com/questions/195262/can-i-turn-off-antialiasing-on-an-html-canvas-element
 		this._context.fillStyle = glyph.bgColor;
+
+		this._context.imageSmoothingEnabled = true;
+
 		this._context.beginPath();
-		this._context.moveTo(xVertex, yVertex);
-		this._context.lineTo(xBaseFloor, yBase);
-		this._context.lineTo(xBaseCeil, yBase);
+
+		var verticalOrientationUp = (y % 2 === 0) ? true : false
+
+		// Calculate the tip vertex based on the row orientation
+		var tipX = x * sideLength + (verticalOrientationUp ? halfSize : 0);
+		var tipY = y * sideLength;
+
+		// Draw a triangle with an up or down orientation
+		// TODO: introduce a specialised coordinate system for this type of grid
+		if (verticalOrientationUp) {
+			this._context.moveTo(tipX, tipY);
+			this._context.lineTo(tipX + halfSize, tipY + sideLength);
+			this._context.lineTo(tipX - halfSize, tipY + sideLength);
+		} else {
+			this._context.moveTo(tipX, tipY);
+			this._context.lineTo(tipX + sideLength, tipY);
+			this._context.lineTo(tipX + halfSize, tipY + sideLength);
+		}
+
 		this._context.fill();
-		this._context.lineWidth = 1;
-		this._context.closePath();
-		this._context.strokeStyle = glyph.bgColor;
+
+		this._context.strokeStyle = '#fff';
+		this._context.strokeSize = 0.1;
 		this._context.stroke();
 
-		this._context.fillStyle = glyph.bgColor;
-		this._context.beginPath();
-		this._context.moveTo(xVertex, yVertex);
-		this._context.lineTo(xBaseCeil, yFloor);
-		this._context.lineTo(xBaseCeil, yCeil);
-		this._context.fill();
-		this._context.lineWidth = 1;
 		this._context.closePath();
-		this._context.strokeStyle = glyph.bgColor;
-		this._context.stroke();
-
-		if (glyph.char == Overprint.Char.NULL) return;
-		// Text not rendered for this grid type (yet)
+		//this._context.restore();
 	}.bind(this));
 }
 
