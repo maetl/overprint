@@ -1,0 +1,140 @@
+<meta http-equiv="content-type" charset="utf-8">
+<canvas id="demo"></canvas>
+<script src="../overprint.js"></script>
+<script>
+var canvas = document.getElementById("demo");
+var defaultGlyph = Overprint.Glyph(Overprint.Char.NULL, 'black', '#ccc');
+
+var vWidth = document.documentElement.clientWidth;
+var vHeight = document.documentElement.clientHeight;
+
+document.body.style.margin = '0px';
+
+canvas.style.margin = '0px';
+canvas.style.width = vWidth.toString() + "px";
+canvas.style.height = vHeight.toString() + "px";
+
+var screenWidth = 70;
+var screenHeight = 30;
+
+var terminal = new Overprint.Terminal(screenWidth, screenHeight, canvas);
+
+var Map = function(tiles) {
+    this.tiles = tiles;
+    this.width = this.tiles[0].length;
+    this.height = this.tiles.length;
+}
+
+Map.prototype.getWidth = function() {
+    return this.width;
+}
+
+Map.prototype.getHeight = function() {
+    return this.height;
+}
+
+Map.prototype.getTile = function(x, y) {
+    if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
+        return null; // TODO: null tile object?
+    } else {
+        return this.tiles[y][x] || null; // TODO: null tile object?
+    }
+}
+
+function makeTile(glyph, color, bgColor) {
+  return Overprint.Glyph(glyph, color, bgColor);
+}
+
+var TileSet = {}
+
+TileSet.Ocean1 = makeTile(" ", "#fff", "#1221de");
+TileSet.Ocean2 = makeTile(" ", "#fff", "#1021fe");
+TileSet.Ocean3 = makeTile(" ", "#fff", "#1101fd");
+TileSet.Ocean4 = makeTile("~", "#fff", "#1001ff");
+TileSet.Ocean5 = makeTile("~", "#eee", "#1101dd");
+
+TileSet.Player = makeTile("🐙", "#f00", "#1101fd");
+
+var oceanTiles = [TileSet.Ocean1, TileSet.Ocean2, TileSet.Ocean3, TileSet.Ocean4, TileSet.Ocean5];
+
+function pickTile() {
+  var index = Math.round(Math.random() * 4);
+  return oceanTiles[index];
+}
+
+function generateMap() {
+  var rows = 2000;
+  var cols = 2000;
+  var tiles = []
+
+  for (var c=0; c<cols; c++) {
+    tiles[c] = [];
+    for (var r=0; r<rows; r++) {
+      tiles[c][r] = pickTile();
+    }
+  }
+
+  return new Map(tiles);
+}
+
+var oceanMap = generateMap();
+var playerX = Math.round(oceanMap.getWidth() / 2);
+var playerY = Math.round(oceanMap.getHeight() / 2);
+var action = null;
+
+function updateState() {
+  if (action) {
+    playerX = playerX + action[0];
+    playerY = playerY + action[1];
+    action = null;
+  }
+}
+
+function renderMap() {
+    var mapWidth = oceanMap.getWidth();
+    var mapHeight = oceanMap.getHeight();
+
+    var topLeftX = Math.max(0, playerX - (screenWidth / 2));
+    topLeftX = Math.min(topLeftX, mapWidth - screenWidth);
+
+    var topLeftY = Math.max(0, playerY - (screenHeight / 2));
+    topLeftY = Math.min(topLeftY, mapHeight - screenHeight);
+
+    for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
+        for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
+            if (x == playerX && y == playerY) {
+              var tile = TileSet.Player;
+            } else {
+              var tile = oceanMap.getTile(x, y);
+            }
+
+            if (!tile) continue;
+
+            terminal.writeGlyph(x - topLeftX, y - topLeftY, tile);
+        }
+    }
+
+    terminal.render();
+    window.requestAnimationFrame(gameLoop);
+}
+
+function gameLoop() {
+  updateState();
+  renderMap();
+}
+
+function handleInput(keyCode) {
+    switch(keyCode) {
+        case 37: action = [-1, 0]; break;
+        case 38: action = [0, -1]; break;
+        case 39: action = [1, 0]; break;
+        case 40: action = [0, 1]; break;
+    }
+}
+
+document.addEventListener("keydown", function(ev) {
+  handleInput(ev.which);
+});
+
+window.requestAnimationFrame(gameLoop);
+</script>
