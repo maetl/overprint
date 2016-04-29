@@ -3,7 +3,6 @@
 <script src="../overprint.js"></script>
 <script>
 var canvas = document.getElementById("demo");
-var defaultGlyph = Overprint.Glyph(Overprint.Char.NULL, 'black', '#ccc');
 
 var vWidth = document.documentElement.clientWidth;
 var vHeight = document.documentElement.clientHeight;
@@ -57,7 +56,7 @@ TileSet.Player = makeTile("🐙", "#f00", "#1101fd");
 
 var oceanTiles = [TileSet.Ocean1, TileSet.Ocean2, TileSet.Ocean3, TileSet.Ocean4, TileSet.Ocean5];
 
-function pickTile() {
+function pickOceanTile() {
   var index = Math.round(Math.random() * 4);
   return oceanTiles[index];
 }
@@ -70,7 +69,7 @@ function generateMap() {
   for (var c=0; c<cols; c++) {
     tiles[c] = [];
     for (var r=0; r<rows; r++) {
-      tiles[c][r] = pickTile();
+      tiles[c][r] = pickOceanTile();
     }
   }
 
@@ -105,7 +104,11 @@ function renderMap() {
             if (x == playerX && y == playerY) {
               var tile = TileSet.Player;
             } else {
-              var tile = oceanMap.getTile(x, y);
+              if (Math.round(Math.random() * 10) == 1) {
+                var tile = pickOceanTile();
+              } else {
+                var tile = oceanMap.getTile(x, y);
+              }
             }
 
             if (!tile) continue;
