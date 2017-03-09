@@ -88,7 +88,7 @@ Overprint.Terminal.prototype.resetLayout = function() {
 		var textHeight = this._font.size;
 
 		// Force square aspect ratio
-		//textWidth = textHeight = Math.max(textWidth, textHeight);
+		textWidth = textHeight = Math.max(textWidth, textHeight);
 
 		var glyphWidth = textWidth;
 		var glyphHeight = textHeight;
