@@ -45,15 +45,20 @@ Overprint.Font = function(family, weight, size) {
 	}
 }
 
-Overprint.Terminal = function(width, height, canvas, font) {
+Overprint.Terminal = function(width, height, canvas, font, isResponsive) {
 	this._width = width;
 	this._height = height;
 	this._canvas = canvas;
 	this._font = font || Overprint.Font('inconsolata', 'normal');
+	this._responsive = isResponsive ? true : false;
 
 	this._context = this._canvas.getContext('2d');
 
 	this._ratio = window.devicePixelRatio || 1;
+
+	this._context.font = this._font.toCSS();
+	// this._context.textAlign = 'center';
+	// this._context.textBaseline = 'middle';
 
 	this.resetLayout();
 
@@ -62,20 +67,46 @@ Overprint.Terminal = function(width, height, canvas, font) {
 }
 
 Overprint.Terminal.prototype.resetLayout = function() {
-	if (!this._canvas.style.width) this._canvas.style.width = 640;
-	if (!this._canvas.style.height) this._canvas.style.height = 480;
+	if (this._responsive) {
+		// Calculates the dimensions of the containing element first
+		if (!this._canvas.style.width) this._canvas.style.width = 640;
+		if (!this._canvas.style.height) this._canvas.style.height = 480;
 
-	var elementWidth = parseInt(this._canvas.style.width, 10)  * this._ratio;
-	var elementHeight = parseInt(this._canvas.style.height, 10) * this._ratio;
+		var elementWidth = parseInt(this._canvas.style.width, 10)  * this._ratio;
+		var elementHeight = parseInt(this._canvas.style.height, 10) * this._ratio;
 
-	this._canvas.width = elementWidth;
-	this._canvas.height = elementHeight;
+		// Calculates cell width and height based on the containing element
+		this._cellWidth = Math.floor(elementWidth / this._width);
+		this._cellHeight = Math.floor(elementHeight / this._height);
 
-	this._cellWidth = Math.floor(elementWidth / this._width);
-	this._cellHeight = Math.floor(elementHeight / this._height);
+		this._canvas.width = elementWidth;
+		this._canvas.height = elementHeight;
+
+	} else {
+		var textMeasure = this._context.measureText("@");
+		var textWidth = Math.ceil(textMeasure.width);
+		var textHeight = this._font.size;
+
+		// Force square aspect ratio
+		//textWidth = textHeight = Math.max(textWidth, textHeight);
+
+		var glyphWidth = textWidth;
+		var glyphHeight = textHeight;
+
+		this._cellWidth = glyphWidth * this._ratio;
+		this._cellHeight = glyphHeight * this._ratio;
+
+		var drawWidth = glyphWidth * this._width;
+		var drawHeight = glyphHeight * this._height;
+
+		this._canvas.width = drawWidth * this._ratio;
+		this._canvas.height = drawHeight * this._ratio;
+
+		this._canvas.style.width = drawWidth;
+		this._canvas.style.height = drawHeight;
+	}
 
 	this._font.size = this._cellWidth;
-
 	this._context.font = this._font.toCSS();
 	this._context.textAlign = 'center';
 	this._context.textBaseline = 'middle';
