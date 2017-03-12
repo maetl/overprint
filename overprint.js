@@ -38,7 +38,7 @@ Overprint.Font = function(family, weight, size) {
 	return {
 		family: family,
 		weight: weight,
-		size: size,
+		size: size || 16,
 		toCSS: function() {
 			return this.weight + ' '+ this.size +'px ' + this.family;
 		}
@@ -49,7 +49,7 @@ Overprint.Terminal = function(width, height, canvas, font, isResponsive) {
 	this._width = width;
 	this._height = height;
 	this._canvas = canvas;
-	this._font = font || Overprint.Font('inconsolata', 'normal');
+	this._font = font || Overprint.Font('Menlo', 'normal');
 	this._responsive = isResponsive ? true : false;
 
 	this._context = this._canvas.getContext('2d');
@@ -83,8 +83,8 @@ Overprint.Terminal.prototype.resetLayout = function() {
 		this._canvas.height = elementHeight;
 
 	} else {
-		var textMeasure = this._context.measureText("@");
-		var textWidth = Math.ceil(textMeasure.width);
+		var textMeasure = this._context.measureText("W");
+		var textWidth = Math.ceil(textMeasure.width) * this._ratio;
 		var textHeight = this._font.size;
 
 		// Force square aspect ratio

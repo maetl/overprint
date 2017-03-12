@@ -13,6 +13,8 @@ document.body.style.padding = '0px';
 var terminal = new Overprint.Terminal(40, 30, canvas);
 terminal.render();
 
+//terminal.writeGlyph(6, 10, Overprint.Glyph("•", "#999"))
+
 terminal.writeGlyph(10, 10, Overprint.Glyph(Overprint.Char.NULL, 'black', '#ff0'));
 terminal.writeGlyph(11, 10, Overprint.Glyph(Overprint.Char.NULL, 'black', '#fe0'));
 terminal.writeGlyph(12, 10, Overprint.Glyph(Overprint.Char.NULL, 'black', '#fd0'));
