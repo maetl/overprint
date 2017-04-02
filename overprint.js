@@ -36,8 +36,8 @@ Overprint.Glyph = function(character, color, bgColor) {
 
 Overprint.Font = function(family, weight, size) {
 	return {
-		family: family,
-		weight: weight,
+		family: family || 'monospace',
+		weight: weight || 'normal',
 		size: size || 16,
 		toCSS: function() {
 			return this.weight + ' '+ this.size +'px ' + this.family;
@@ -45,20 +45,19 @@ Overprint.Font = function(family, weight, size) {
 	}
 }
 
-Overprint.Terminal = function(width, height, canvas, font, isResponsive) {
+Overprint.Terminal = function(width, height, canvas, font, isResponsive, forceSquare) {
 	this._width = width;
 	this._height = height;
 	this._canvas = canvas;
-	this._font = font || Overprint.Font('Menlo', 'normal');
+	this._font = font || Overprint.Font();
 	this._responsive = isResponsive ? true : false;
+	this._squared = forceSquare ? true : false;
 
 	this._context = this._canvas.getContext('2d');
 
 	this._ratio = window.devicePixelRatio || 1;
 
 	this._context.font = this._font.toCSS();
-	// this._context.textAlign = 'center';
-	// this._context.textBaseline = 'middle';
 
 	this.resetLayout();
 
@@ -83,12 +82,17 @@ Overprint.Terminal.prototype.resetLayout = function() {
 		this._canvas.height = elementHeight;
 
 	} else {
-		var textMeasure = this._context.measureText("W");
-		var textWidth = Math.ceil(textMeasure.width) * this._ratio;
+		// Measure text width from canvas context
+		var textMeasure = this._context.measureText("M");
+
+		// Canvas measure text with direct multiple of font size
+		var textWidth = Math.ceil(textMeasure.width);
 		var textHeight = this._font.size;
 
 		// Force square aspect ratio
-		textWidth = textHeight = Math.max(textWidth, textHeight);
+		if (this._squared) {
+			textWidth = textHeight = Math.max(textWidth, textHeight);
+		}
 
 		var glyphWidth = textWidth;
 		var glyphHeight = textHeight;
@@ -106,14 +110,14 @@ Overprint.Terminal.prototype.resetLayout = function() {
 		this._canvas.style.height = drawHeight;
 	}
 
-	this._font.size = this._cellWidth;
+	this._font.size = this._font.size * this._ratio;
 	this._context.font = this._font.toCSS();
 	this._context.textAlign = 'center';
 	this._context.textBaseline = 'middle';
 }
 
 Overprint.Terminal.prototype.clear = function(glyph) {
-	var bgGlyph = glyph ? glyph : Overprint.Glyph();
+	var bgGlyph = glyph ? glyph : this._emptyCell;
 	for (var col=0; col<this._width; col++) {
 		for (var row=0; row<this._height; row++) {
 			this._display.setCell(col, row, bgGlyph);
