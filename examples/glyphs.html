@@ -9,11 +9,11 @@ canvas.style.margin = '0px';
 canvas.style.padding = '0px';
 document.body.style.margin = '0px';
 document.body.style.padding = '0px';
+//document.body.style.backgroundColor = '#000';
 
-var terminal = new Overprint.Terminal(40, 30, canvas);
-terminal.render();
+var terminal = new Overprint.Terminal(40, 26, canvas, Overprint.Font(), false, true);
 
-//terminal.writeGlyph(6, 10, Overprint.Glyph("•", "#999"))
+terminal.clear(Overprint.Glyph());
 
 terminal.writeGlyph(10, 10, Overprint.Glyph(Overprint.Char.NULL, 'black', '#ff0'));
 terminal.writeGlyph(11, 10, Overprint.Glyph(Overprint.Char.NULL, 'black', '#fe0'));
@@ -55,6 +55,13 @@ terminal.writeGlyph(22, 23, Overprint.Glyph("#", "#fff", "#444"));
 terminal.writeGlyph(23, 23, Overprint.Glyph("#", "#fff", "#444"));
 terminal.writeGlyph(24, 23, Overprint.Glyph("#", "#fff", "#444"));
 terminal.writeGlyph(25, 23, Overprint.Glyph("#", "#fff", "#444"));
+
+terminal.writeGlyph(10, 6, Overprint.Glyph("╔", "#fff", "#000"));
+terminal.writeGlyph(11, 6, Overprint.Glyph("═", "#fff", "#000"));
+terminal.writeGlyph(12, 6, Overprint.Glyph("╗", "#fff", "#000"));
+terminal.writeGlyph(10, 7, Overprint.Glyph("╚", "#fff", "#000"));
+terminal.writeGlyph(11, 7, Overprint.Glyph("═", "#fff", "#000"));
+terminal.writeGlyph(12, 7, Overprint.Glyph("╝", "#fff", "#000"));
 
 terminal.render();
 

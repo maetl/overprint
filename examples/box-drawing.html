@@ -1,0 +1,52 @@
+<meta http-equiv="content-type" charset="utf-8">
+<canvas id="demo"></canvas>
+<script src="../overprint.js"></script>
+<script>
+var canvas = document.getElementById("demo");
+canvas.style.width = document.documentElement.clientWidth;
+canvas.style.height = document.documentElement.clientHeight;
+canvas.style.margin = '0px';
+canvas.style.padding = '0px';
+document.body.style.margin = '0px';
+document.body.style.padding = '0px';
+//document.body.style.backgroundColor = '#000';
+
+var boxes = [
+  "╔═══════════════════╗ ",
+  "║                   ║ ",
+  "║                   ║ ",
+  "║                   ║ ",
+  "║                   ║ ",
+  "║                   ║ ",
+  "║                   ║ ",
+  "║                   ║ ",
+  "╚═══════════════════╝ ",
+  "                      ",
+  "┌─┬┐  ╔═╦╗  ╓─╥╖  ╒═╤╕",
+  "│ ││  ║ ║║  ║ ║║  │ ││",
+  "├─┼┤  ╠═╬╣  ╟─╫╢  ╞═╪╡",
+  "└─┴┘  ╚═╩╝  ╙─╨╜  ╘═╧╛",
+  "┌───────────────────┐ ",
+  "│  ╔═══╗ Some Text  │▒",
+  "│  ╚═╦═╝ in the box │▒",
+  "╞═╤══╩══╤═══════════╡▒",
+  "│ ├──┬──┤           │▒",
+  "│ └──┴──┘           │▒",
+  "└───────────────────┘▒",
+  " ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒"
+];
+
+var charWidth = boxes[0].length;
+var charHeight = boxes.length;
+var terminal = new Overprint.Terminal(charWidth, charHeight, canvas, Overprint.Font());
+
+terminal.render();
+
+boxes.forEach(function(line, yPos) {
+  line.split('').forEach(function(char, xPos) {
+    terminal.writeGlyph(xPos, yPos, Overprint.Glyph(char, "#eee"));
+  });
+})
+
+terminal.render();
+</script>
