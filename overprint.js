@@ -348,6 +348,8 @@ Overprint.DisplayState = function(width, height, cell) {
 
 	this._renderedCells = fillArray2D(width, height, cell);
 	this._updatedCells = fillArray2D(width, height, cell);
+
+	this._dirty = true;
 }
 
 Overprint.DisplayState.prototype.setCell = function(x, y, cell) {
@@ -360,12 +362,15 @@ Overprint.DisplayState.prototype.setCell = function(x, y, cell) {
 
 	if (this._renderedCells[x][y] !== cell) {
 		this._updatedCells[x][y] = cell;
+		this._dirty = true;
 	} else {
 		this._updatedCells[x][y] = null;
 	}
 }
 
 Overprint.DisplayState.prototype.render = function(callback) {
+	if (!this._dirty) return;
+
 	for (var col=0; col<this._width; col++) {
 		for (var row=0; row<this._height; row++) {
 			var cell = this._updatedCells[col][row];
