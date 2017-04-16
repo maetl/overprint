@@ -1,6 +1,3 @@
-var overprint = (function () {
-'use strict';
-
 var Overprint = {
 	Char: {
 		NULL: ' ',
@@ -35,7 +32,7 @@ Overprint.Glyph = function(character, color, bgColor) {
 		color: color || Overprint.Color.WHITE,
 		bgColor: bgColor || Overprint.Color.BLACK
 	}
-};
+}
 
 Overprint.Font = function(family, weight, size) {
 	return {
@@ -46,7 +43,7 @@ Overprint.Font = function(family, weight, size) {
 			return this.weight + ' '+ this.size +'px ' + this.family;
 		}
 	}
-};
+}
 
 Overprint.Terminal = function(width, height, canvas, font, isResponsive, forceSquare) {
 	this._width = width;
@@ -66,7 +63,7 @@ Overprint.Terminal = function(width, height, canvas, font, isResponsive, forceSq
 
 	var cell = this._emptyCell = Overprint.Glyph();
 	this._display = new Overprint.DisplayState(width, height, cell);
-};
+}
 
 Overprint.Terminal.prototype.resetLayout = function() {
 	if (this._responsive) {
@@ -122,7 +119,7 @@ Overprint.Terminal.prototype.resetLayout = function() {
 	this._context.font = this._font.toCSS();
 	this._context.textAlign = 'center';
 	this._context.textBaseline = 'middle';
-};
+}
 
 Overprint.Terminal.prototype.clear = function(glyph) {
 	var bgGlyph = glyph ? glyph : this._emptyCell;
@@ -131,15 +128,15 @@ Overprint.Terminal.prototype.clear = function(glyph) {
 			this._display.setCell(col, row, bgGlyph);
 		}
 	}
-};
+}
 
 Overprint.Terminal.prototype.fill = function(glyph) {
 	this.clear(glyph);
-};
+}
 
 Overprint.Terminal.prototype.writeGlyph = function(x, y, glyph) {
 	this._display.setCell(x, y, glyph);
-};
+}
 
 Overprint.Terminal.prototype.writeText = function(x, y, text) {
 	var cursorPosition = 0;
@@ -150,7 +147,7 @@ Overprint.Terminal.prototype.writeText = function(x, y, text) {
 		this._display.setCell(cursorPosition + x, y, textGlyph);
 		cursorPosition++;
 	}
-};
+}
 
 Overprint.Terminal.prototype.render = function() {
 	this._display.render(function(x, y, glyph){
@@ -168,7 +165,7 @@ Overprint.Terminal.prototype.render = function() {
 		var yPos = (y * cellHeight) + cellHeight / 2;
 		this._context.fillText(glyph.char, xPos, yPos);
 	}.bind(this));
-};
+}
 
 Overprint.Hexgrid = function(width, height, canvas) {
 	this._width = width;
@@ -183,7 +180,7 @@ Overprint.Hexgrid = function(width, height, canvas) {
 
 	var cell = this._emptyCell = Overprint.Glyph();
 	this._display = new Overprint.DisplayState(width, height, cell);
-};
+}
 
 Overprint.Hexgrid.prototype.resetLayout = function() {
 	if (!this._canvas.style.width) this._canvas.style.width = 640;
@@ -200,11 +197,11 @@ Overprint.Hexgrid.prototype.resetLayout = function() {
 	//this._cellHeight = elementHeight / this._height / 2;
 	this._cellWidth = 16;
 	this._cellHeight = 16;
-};
+}
 
 Overprint.Hexgrid.prototype.writeCell = function(x, y, glyph) {
 	this._display.setCell(x, y, glyph);
-};
+}
 
 Overprint.Hexgrid.prototype.render = function() {
 	this._display.render(function(x, y, glyph){
@@ -248,7 +245,7 @@ Overprint.Hexgrid.prototype.render = function() {
 		//this._context.restore();
 
 	}.bind(this));
-};
+}
 
 Overprint.Hexgrid.prototype.clear = function(glyph) {
 	var bgGlyph = glyph ? glyph : Overprint.Glyph();
@@ -257,7 +254,7 @@ Overprint.Hexgrid.prototype.clear = function(glyph) {
 			this._display.setCell(col, row, bgGlyph);
 		}
 	}
-};
+}
 
 Overprint.Trigrid = function(width, height, canvas) {
 	this._width = width;
@@ -270,7 +267,7 @@ Overprint.Trigrid = function(width, height, canvas) {
 
 	var cell = this._emptyCell = Overprint.Glyph();
 	this._display = new Overprint.DisplayState(width, height, cell);
-};
+}
 
 Overprint.Trigrid.prototype.resetLayout = function() {
 	if (!this._canvas.style.width) this._canvas.style.width = 640;
@@ -284,12 +281,12 @@ Overprint.Trigrid.prototype.resetLayout = function() {
 
 	this._cellWidth = elementWidth / this._width;
 	this._cellHeight = elementHeight / this._height;
-};
+}
 
 // TODO: +api work out the best value obj structure to pass here instead of glyph
 Overprint.Trigrid.prototype.writeCell = function(x, y, glyph) {
 	this._display.setCell(x, y, glyph);
-};
+}
 
 Overprint.Trigrid.prototype.render = function() {
 	this._display.render(function(x, y, glyph){
@@ -309,7 +306,7 @@ Overprint.Trigrid.prototype.render = function() {
 
 		this._context.beginPath();
 
-		var verticalOrientationUp = (y % 2 === 0) ? true : false;
+		var verticalOrientationUp = (y % 2 === 0) ? true : false
 
 		// Calculate the tip vertex based on the row orientation
 		var tipX = x * sideLength + (verticalOrientationUp ? halfSize : 0);
@@ -336,7 +333,7 @@ Overprint.Trigrid.prototype.render = function() {
 		this._context.closePath();
 		//this._context.restore();
 	}.bind(this));
-};
+}
 
 Overprint.DisplayState = function(width, height, cell) {
 	function fillArray2D(width, height, fill) {
@@ -358,7 +355,7 @@ Overprint.DisplayState = function(width, height, cell) {
 	this._updatedCells = fillArray2D(width, height, cell);
 
 	this._dirty = true;
-};
+}
 
 Overprint.DisplayState.prototype.setCell = function(x, y, cell) {
 	if (x < 0) return;
@@ -374,7 +371,7 @@ Overprint.DisplayState.prototype.setCell = function(x, y, cell) {
 	} else {
 		this._updatedCells[x][y] = null;
 	}
-};
+}
 
 Overprint.DisplayState.prototype.render = function(callback) {
 	if (!this._dirty) return;
@@ -391,8 +388,6 @@ Overprint.DisplayState.prototype.render = function(callback) {
 			this._updatedCells[col][row] = null;
 		}
 	}
-};
+}
 
-return Overprint;
-
-}());
+export default Overprint;
