@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "description": "A JavaScript toolkit for rendering grids and maps",
   "main": "overprint.js",
-  "module": "src/overprint.js",
+  "module": "overprint/index.js",
   "scripts": {
     "build": "rollup -c"
   },
