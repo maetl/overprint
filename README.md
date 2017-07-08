@@ -6,7 +6,8 @@ It’s intended to be useful for discrete visualisations, abstract/fantasy/proce
 
 ## Status
 
-[![npm](https://img.shields.io/npm/v/overprint.svg)]()
+[![npm](https://img.shields.io/npm/v/overprint.svg)](https://npmjs.org/package/overprint)
+[![travis](https://img.shields.io/travis/maetl/overprint.svg)](https://travis-ci.org/maetl/overprint)
 
 ## Usage
 
@@ -14,7 +15,7 @@ Display a retro glyph terminal:
 
 ```js
 // Find or create an HTML canvas element in the DOM
-// eg: <canvas id="demo-canvas"></canvas> 
+// eg: <canvas id="demo-canvas"></canvas>
 var canvas = document.querySelector(".demo-canvas");
 
 // Create a 40x30 retro glyph terminal using the builtin browser fonts
