@@ -1,15 +1,29 @@
 {
   "name": "overprint",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A JavaScript toolkit for rendering grids and maps",
   "main": "overprint.js",
   "module": "overprint/index.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "ava --verbose"
   },
   "author": "Mark Rickerby",
   "license": "MIT",
   "devDependencies": {
+    "ava": "^0.20.0",
+    "babel-preset-env": "^1.6.0",
     "rollup": "^0.41.6"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   }
 }
