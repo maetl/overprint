@@ -13,8 +13,8 @@ canvas.style.margin = '0px';
 canvas.style.width = vWidth.toString() + "px";
 canvas.style.height = vHeight.toString() + "px";
 
-var screenWidth = 70;
-var screenHeight = 30;
+var screenWidth = 71;
+var screenHeight = 31;
 
 var terminal = new Overprint.Terminal(screenWidth, screenHeight, canvas);
 
@@ -93,16 +93,17 @@ function renderMap() {
     var mapWidth = oceanMap.getWidth();
     var mapHeight = oceanMap.getHeight();
 
-    var topLeftX = Math.max(0, playerX - (screenWidth / 2));
+    var topLeftX = Math.floor(playerX - (screenWidth / 2) + 1);
     topLeftX = Math.min(topLeftX, mapWidth - screenWidth);
 
-    var topLeftY = Math.max(0, playerY - (screenHeight / 2));
+    var topLeftY = Math.floor(playerY - (screenHeight / 2) + 1);
     topLeftY = Math.min(topLeftY, mapHeight - screenHeight);
 
     for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
         for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
             if (x == playerX && y == playerY) {
               var tile = TileSet.Player;
+              //console.log(x - topLeftX, y - topLeftY);
             } else {
               if (Math.round(Math.random() * 10) == 1) {
                 var tile = pickOceanTile();

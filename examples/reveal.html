@@ -2,7 +2,7 @@
 <canvas id="demo"></canvas>
 <script src="../overprint.js"></script>
 <script>
-
+var Overprint = overprint;
 var picture = [
 '   _______________________________',
 '  /\\.............................\\',
@@ -100,7 +100,7 @@ function renderTiles() {
 	}
 
 	if (!glyph) {
-		glyph = Overprint.Glyph(Overprint.Char.NULL, 'black', color);		
+		glyph = Overprint.Glyph(Overprint.Char.NULL, 'black', color);
 	}
 
 
@@ -121,7 +121,7 @@ function renderTiles() {
 	} else {
 
 		//while (currentCol >= 0) {
-			
+
 		if (currentCol >= 0) currentCol--;
 		//}
 
