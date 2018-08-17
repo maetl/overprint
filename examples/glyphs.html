@@ -2,6 +2,7 @@
 <canvas id="demo"></canvas>
 <script src="../overprint.js"></script>
 <script>
+var Overprint = overprint;
 var canvas = document.getElementById("demo");
 canvas.style.width = document.documentElement.clientWidth;
 canvas.style.height = document.documentElement.clientHeight;
@@ -13,7 +14,18 @@ document.body.style.padding = '0px';
 
 var terminal = new Overprint.Terminal(40, 26, canvas, Overprint.Font(), false, true);
 
+terminal.onClick(function(col, row) {
+  terminal.writeGlyph(col, row, Overprint.Glyph("@", "#000", "#f00"));
+  terminal.render();
+})
+
 terminal.clear(Overprint.Glyph());
+
+terminal.writeGlyph(0, 0, Overprint.Glyph("0", "#fff"));
+terminal.writeGlyph(1, 0, Overprint.Glyph("1", "#fff"));
+terminal.writeGlyph(2, 0, Overprint.Glyph("2", "#fff"));
+terminal.writeGlyph(3, 0, Overprint.Glyph("3", "#fff"));
+terminal.writeGlyph(4, 0, Overprint.Glyph("4", "#000", "#fff"));
 
 terminal.writeGlyph(10, 10, Overprint.Glyph(Overprint.Char.NULL, 'black', '#ff0'));
 terminal.writeGlyph(11, 10, Overprint.Glyph(Overprint.Char.NULL, 'black', '#fe0'));

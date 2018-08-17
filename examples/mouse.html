@@ -1,0 +1,39 @@
+<meta http-equiv="content-type" charset="utf-8">
+<canvas id="demo"></canvas>
+<script src="../overprint.js"></script>
+<script>
+var canvas = document.getElementById("demo");
+canvas.style.width = document.documentElement.clientWidth;
+canvas.style.height = document.documentElement.clientHeight;
+canvas.style.margin = '0px';
+canvas.style.padding = '0px';
+document.body.style.margin = '0px';
+document.body.style.padding = '0px';
+
+var terminal = new overprint.Terminal(40, 20, canvas, overprint.Font(), true, true);
+
+var activeCell = {x: Infinity, y: Infinity }
+
+var MarkedCell = overprint.Glyph("•", "#000", "#f00");
+var BlankCell = overprint.Glyph(overprint.Char.NULL, "#000", "#fff");
+var CursorCell = overprint.Glyph(overprint.Char.NULL, "#fff", "#000");
+
+terminal.onClick(function(col, row) {
+  terminal.writeGlyph(col, row, MarkedCell);
+  terminal.render();
+})
+
+terminal.onMouseMove(function(col, row) {
+  if (activeCell.x == col && activeCell.y == row) {
+    terminal.writeGlyph(col, row, BlankCell);
+  } else {
+    terminal.writeGlyph(activeCell.x, activeCell.y, CursorCell);
+    activeCell.x = col
+    activeCell.y = row
+  }
+  terminal.render();
+})
+
+terminal.render();
+
+</script>

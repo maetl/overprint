@@ -167,6 +167,29 @@ Overprint.Terminal.prototype.render = function() {
 	}.bind(this));
 }
 
+Overprint.Terminal.prototype.pxToCell = function(ev) {
+	var bounds = this._canvas.getBoundingClientRect();
+	var relativeX = ev.clientX - bounds.left;
+	var relativeY = ev.clientY - bounds.top;
+	var colPos = Math.trunc(relativeX / this._cellWidth * this._ratio);
+	var rowPos = Math.trunc(relativeY / this._cellHeight * this._ratio);
+	return [colPos, rowPos];
+}
+
+Overprint.Terminal.prototype.onClick = function(cb) {
+	this._canvas.addEventListener('click', function(ev) {
+		var cell = this.pxToCell(ev)
+		cb(cell[0], cell[1])
+	}.bind(this))
+}
+
+Overprint.Terminal.prototype.onMouseMove = function(cb) {
+	this._canvas.addEventListener('mousemove', function(ev) {
+		var cell = this.pxToCell(ev)
+		cb(cell[0], cell[1])
+	}.bind(this))
+}
+
 Overprint.Hexgrid = function(width, height, canvas) {
 	this._width = width;
 	this._height = height;
