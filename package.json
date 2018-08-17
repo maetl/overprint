@@ -2,8 +2,9 @@
   "name": "overprint",
   "version": "0.4.0",
   "description": "A JavaScript toolkit for rendering grids and maps",
-  "main": "overprint.js",
-  "module": "overprint/index.js",
+  "main": "dist/overprint.cjs.js",
+  "module": "dist/overprint.esm.js",
+  "browser": "overprint.js",
   "scripts": {
     "build": "rollup -c",
     "test": "ava --verbose"
@@ -12,18 +13,12 @@
   "license": "MIT",
   "devDependencies": {
     "ava": "^0.20.0",
-    "babel-preset-env": "^1.6.0",
-    "rollup": "^0.41.6"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
+    "esm": "^3.0.73",
+    "rollup": "^0.63.4"
   },
   "ava": {
     "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
+      "esm"
+    ]
   }
 }
