@@ -1,4 +1,5 @@
 import Glyph from './glyph'
+import Char from './char'
 import DisplayState from './display-state'
 
 const Terminal = function(width, height, canvas, font, isResponsive, forceSquare) {
@@ -121,6 +122,29 @@ Terminal.prototype.render = function() {
 		var yPos = (y * cellHeight) + cellHeight / 2;
 		this._context.fillText(glyph.char, xPos, yPos);
 	}.bind(this));
+}
+
+Terminal.prototype.pxToCell = function(ev) {
+	var bounds = this._canvas.getBoundingClientRect();
+	var relativeX = ev.clientX - bounds.left;
+	var relativeY = ev.clientY - bounds.top;
+	var colPos = Math.trunc(relativeX / this._cellWidth * this._ratio);
+	var rowPos = Math.trunc(relativeY / this._cellHeight * this._ratio);
+	return [colPos, rowPos];
+}
+
+Terminal.prototype.onClick = function(cb) {
+	this._canvas.addEventListener('click', function(ev) {
+		var cell = this.pxToCell(ev)
+		cb(cell[0], cell[1])
+	}.bind(this))
+}
+
+Terminal.prototype.onMouseMove = function(cb) {
+	this._canvas.addEventListener('mousemove', function(ev) {
+		var cell = this.pxToCell(ev)
+		cb(cell[0], cell[1])
+	}.bind(this))
 }
 
 export default Terminal;
