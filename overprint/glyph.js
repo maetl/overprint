@@ -1,8 +1,11 @@
+import Char from './char'
+import Color from './color'
+
 const Glyph = function(character, color, bgColor) {
 	return {
-		char: character || Overprint.Char.NULL,
-		color: color || Overprint.Color.WHITE,
-		bgColor: bgColor || Overprint.Color.BLACK
+		char: character || Char.NULL,
+		color: color || Color.WHITE,
+		bgColor: bgColor || Color.BLACK
 	}
 }
 

@@ -3,6 +3,22 @@ var overprint = (function (exports) {
 
   const Char = {};
 
+  Char.WHITE_SMILING_FACE = '☺';
+  Char.BLACK_SMILING_FACE = '☻';
+  Char.BLACK_HEART_SUIT = '♥';
+  Char.BLACK_DIAMOND_SUIT = '♦';
+  Char.BLACK_CLUB_SUIT = '♣';
+  Char.BLACK_SPADE_SUIT = '♠';
+  Char.BULLET = '•';
+  Char.INVERSE_BULLET = '◘';
+  Char.WHITE_CIRCLE = '○';
+  Char.INVERSE_WHITE_CIRCLE = '◙';
+  Char.MALE_SIGN = '♂';
+  Char.FEMALE_SIGN = '♀';
+  Char.EIGHTH_NOTE = '♪';
+  Char.BEAMED_EIGHTH_NOTES = '♫';
+  Char.WHITE_SUN_WITH_RAYS = '☼';
+
   Char.NULL = ' ';
   Char.SPACE = ' ';
   Char.AMPERSAND = '&';
@@ -40,9 +56,9 @@ var overprint = (function (exports) {
 
   const Glyph = function(character, color, bgColor) {
   	return {
-  		char: character || Overprint.Char.NULL,
-  		color: color || Overprint.Color.WHITE,
-  		bgColor: bgColor || Overprint.Color.BLACK
+  		char: character || Char.NULL,
+  		color: color || Color.WHITE,
+  		bgColor: bgColor || Color.BLACK
   	}
   };
 
@@ -246,11 +262,118 @@ var overprint = (function (exports) {
   	}.bind(this));
   };
 
+  const CodePage = {
+    [Char.NULL]: 0,
+    [Char.WHITE_SMILING_FACE]: 1,
+    [Char.BLACK_SMILING_FACE]: 2,
+    [Char.BLACK_HEART_SUIT]: 3,
+    [Char.BLACK_SPADE_SUIT]: 4,
+    [Char.BLACK_CLUB_SUIT]: 5,
+    [Char.BLACK_SPADE_SUIT]: 6,
+    [Char.BULLET]: 7,
+    [Char.INVERSE_BULLET]: 8,
+    [Char.WHITE_CIRCLE]: 9,
+    [Char.INVERSE_WHITE_CIRCLE]: 10,
+    [Char.MALE_SIGN]: 11,
+    [Char.FEMALE_SIGN]: 12,
+    [Char.EIGHTH_NOTE]: 13,
+    [Char.BEAMED_EIGHTH_NOTES]: 14,
+    [Char.WHITE_SUN_WITH_RAYS]: 15
+  };
+
+  const BitmapTerminal = function(width, height, canvas, atlas, tileWidth, tileHeight) {
+  	this._atlas = atlas;
+  	this._width = width;
+  	this._height = height;
+  	this._canvas = canvas;
+  	this._tileWidth = tileWidth;
+  	this._tileHeight = tileHeight;
+  	this._context = this._canvas.getContext('2d');
+  	this._ratio = window.devicePixelRatio || 1;
+  	this.resetLayout();
+  	var cell = this._emptyCell = Glyph();
+  	this._display = new DisplayState(width, height, cell);
+  };
+
+  BitmapTerminal.prototype.resetLayout = function() {
+  	var glyphWidth = this._tileWidth;
+  	var glyphHeight = this._tileHeight;
+
+  	this._cellWidth = glyphWidth * this._ratio;
+  	this._cellHeight = glyphHeight * this._ratio;
+
+  	var drawWidth = glyphWidth * this._width;
+  	var drawHeight = glyphHeight * this._height;
+
+  	this._canvas.width = drawWidth * this._ratio;
+  	this._canvas.height = drawHeight * this._ratio;
+
+  	this._canvas.style.width = drawWidth;
+  	this._canvas.style.height = drawHeight;
+  };
+
+  BitmapTerminal.prototype.writeGlyph = function(x, y, glyph) {
+  	this._display.setCell(x, y, glyph);
+  };
+
+  BitmapTerminal.prototype.render = function() {
+  	this._display.render(function(x, y, glyph){
+
+  		this._context.fillStyle = glyph.bgColor;
+  		this._context.fillRect(
+  			Math.round(x * this._tileWidth),
+  			Math.round(y * this._tileHeight),
+  			this._tileWidth,
+  			this._tileHeight
+  		);
+
+  		if (glyph.char == Char.NULL) return;
+
+      var codePoint = CodePage[glyph.char] || glyph.char.charCodeAt();
+      var glyphX = codePoint % this._atlas.rowLength;
+      var glyphY = Math.trunc(codePoint / this._atlas.rowLength);
+
+  		console.log(glyphX);
+  		console.log(glyphY);
+
+  		this._context.drawImage(
+  			this._atlas.image,
+  			glyphX * this._atlas.width,
+  			glyphY * this._atlas.height,
+  			this._atlas.width,
+  			this._atlas.height,
+  			Math.round(x * this._tileWidth),
+  			Math.round(y * this._tileHeight),
+  			this._tileWidth,
+  			this._tileHeight
+  		);
+  	}.bind(this));
+  };
+
+  class BitmapFont {
+  	constructor(imagePath, width, height, rowLength) {
+  		this.width = width;
+  		this.height = height;
+  	  this.rowLength = rowLength;
+  		this.image = new Image();
+  		this.image.addEventListener('load', function() {
+  			if (this._onReady) this._onReady();
+  		}.bind(this), false);
+  		this.image.src = imagePath;
+  	}
+
+  	ready(onReady) {
+  		this._onReady = onReady;
+  	}
+  }
+
   exports.Char = Char;
   exports.Color = Color;
   exports.Font = Font$1;
   exports.Glyph = Glyph;
   exports.Terminal = Terminal;
+  exports.BitmapTerminal = BitmapTerminal;
+  exports.BitmapFont = BitmapFont;
 
   return exports;
 
