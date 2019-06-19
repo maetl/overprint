@@ -77,8 +77,8 @@ class TextGrid {
   		this._canvas.width = drawWidth * this._ratio;
   		this._canvas.height = drawHeight * this._ratio;
 
-  		this._canvas.style.width = drawWidth;
-  		this._canvas.style.height = drawHeight;
+      this._canvas.style.width = `${drawWidth}px`;
+  		this._canvas.style.height = `${drawHeight}px`;
   	}
 
   	this._font.size = this._font.size * this._ratio;
