@@ -51,19 +51,16 @@ BitmapTerminal.prototype.render = function() {
 
 		if (glyph.char == Char.NULL) return;
 
-    var codePoint = CodePage[glyph.char] || glyph.char.charCodeAt();
+    var codePoint = CodePage[glyph.char] || glyph.char;
     var glyphX = codePoint % this._atlas.rowLength;
     var glyphY = Math.trunc(codePoint / this._atlas.rowLength);
 
-		console.log(glyphX)
-		console.log(glyphY)
-
 		this._context.drawImage(
 			this._atlas.image,
-			glyphX * this._atlas.width,
-			glyphY * this._atlas.height,
-			this._atlas.width,
-			this._atlas.height,
+			glyphX * this._atlas.width * this._ratio,
+			glyphY * this._atlas.height * this._ratio,
+			this._atlas.width * this._ratio,
+			this._atlas.height * this._ratio,
 			Math.round(x * this._tileWidth),
 			Math.round(y * this._tileHeight),
 			this._tileWidth,
