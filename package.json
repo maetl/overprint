@@ -12,9 +12,9 @@
   "author": "Mark Rickerby",
   "license": "MIT",
   "devDependencies": {
-    "ava": "^0.25.0",
-    "esm": "^3.0.73",
-    "rollup": "^0.63.4"
+    "ava": "^2.1",
+    "esm": "^3.2",
+    "rollup": "^1.15"
   },
   "files": [
     "overprint.js",
