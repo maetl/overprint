@@ -13,13 +13,26 @@ document.body.style.padding = '0px';
 var terminal = new overprint.Terminal(40, 20, canvas, overprint.Font(), true, true);
 
 var activeCell = {x: Infinity, y: Infinity }
+var lineBuffer = null;
 
 var MarkedCell = overprint.Glyph("•", "#000", "#f00");
 var BlankCell = overprint.Glyph(overprint.Char.NULL, "#000", "#fff");
 var CursorCell = overprint.Glyph(overprint.Char.NULL, "#fff", "#000");
 
 terminal.onClick(function(col, row) {
-  terminal.writeGlyph(col, row, MarkedCell);
+  if (!lineBuffer) {
+    lineBuffer = {x: col, y: row};
+    terminal.writeGlyph(col, row, MarkedCell);
+  } else {
+    var path = line(lineBuffer, {x: col, y: row});
+
+    for (point of path) {
+      terminal.writeGlyph(point.x, point.y, MarkedCell);
+    }
+
+    lineBuffer = null;
+  }
+
   terminal.render();
 })
 
@@ -32,7 +45,42 @@ terminal.onMouseMove(function(col, row) {
     activeCell.y = row
   }
   terminal.render();
-})
+});
+
+function line(from, to) {
+  let { x: x0, y: y0 } = from;
+  let { x: x1, y: y1 } = to;
+
+  const dx = Math.abs(x1 - x0);
+  const dy = Math.abs(y1 - y0);
+
+  const sx = x0 < x1 ? 1 : -1;
+	const sy = y0 < y1 ? 1 : -1;
+
+  let err = dx - dy;
+
+  const points = [];
+
+  while(true) {
+    points.push({x: x0, y: y0});
+
+    if (x0 == x1 && y0 == y1) break;
+
+    const errq = err * 2;
+
+    if (errq > -dx) {
+      err -= dy;
+      x0 += sx;
+    }
+
+    if (errq < dx) {
+      err += dx;
+      y0 += sy;
+    }
+  }
+
+  return points;
+}
 
 terminal.render();
 
