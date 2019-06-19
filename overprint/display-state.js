@@ -20,6 +20,28 @@ const DisplayState = function(width, height, cell) {
 	this._dirty = true;
 }
 
+DisplayState.prototype.setCharacter = function(x, y, character) {
+  if (x < 0) return;
+  if (x >= this._width) return;
+  if (y < 0) return;
+  if (y >= this._height) return;
+
+  if (!character) return;
+
+  if (this._renderedCells[x][y].character != character) {
+    const foregroundColor = this._updatedCells[x][y].foregroundColor || this._renderedCells[x][y].foregroundColor
+    const backgroundColor = this._updatedCells[x][y].backgroundColor || this._renderedCells[x][y].backgroundColor
+    this._updatedCells[x][y] = {
+      character,
+      foregroundColor,
+      backgroundColor
+    };
+    this._dirty = true;
+  } else {
+    this._updatedCells[x][y] = null;
+  }
+}
+
 DisplayState.prototype.setCell = function(x, y, cell) {
 	if (x < 0) return;
 	if (x >= this._width) return;
