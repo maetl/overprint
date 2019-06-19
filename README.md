@@ -2,41 +2,50 @@
 
 Overprint is a minimalist toolkit for rendering cell grids and tile maps using the [HTML Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
-It’s intended to be useful for discrete visualisations, abstract/fantasy/procedural map generation and 2D game development with an old-school flavour.
+It’s intended to be useful for visualizing discrete simulations, cellular automata, abstract/fantasy procedural map generation and 2D game development with an old-school flavour.
 
 ## Status
 
 [![npm](https://img.shields.io/npm/v/overprint.svg)](https://npmjs.org/package/overprint)
 [![travis](https://img.shields.io/travis/maetl/overprint.svg)](https://travis-ci.org/maetl/overprint)
 
-## Usage
+## Basic Usage
 
-Display a retro glyph terminal:
+The following example illustrates the main features of the API.
 
 ```js
+import { TextGrid, Cell } from "overprint"
+
 // Find or create an HTML canvas element in the DOM
-// eg: <canvas id="demo-canvas"></canvas>
-var canvas = document.querySelector(".demo-canvas");
+// eg: <canvas id="demo"></canvas>
+const canvas = document.querySelector("#demo")
 
-// Create a 40x30 retro glyph terminal using the builtin browser fonts
-var terminal = new Overprint.Terminal(40, 30, canvas);
+// Create a default text grid from the canvas element
+const grid = new TextGrid(canvas)
 
-// Create a glyph object representing an nonprinting character
-// with defined foreground and background colors
-var blackBg = Overprint.Glyph(Overprint.Char.NULL, 'black', 'black');
+// Predefine a map of cell objects representing text characters
+// with foreground and background colors
+const Cells = {
+  Grass: Cell(".", "#37CC63", "#2F3D33"),
+  Sapling: Cell("^", "#A09A2C", "#2F3D33"),
+  Tree: Cell("↑", "#337C22", "#2F3D33")
+}
 
-// Flood fill the grid with the given background glyph
-terminal.fill(blackBg);
+// Fill the entire grid
+grid.fill(Cells.Grass)
 
-// Render the filled terminal
-terminal.render();
+// Render the filled cells to the canvas
+grid.render()
 
-// Write text glyphs to specific cells in the grid
-terminal.writeGlyph(10, 20, Overprint.Glyph("@", "#fff"));
-terminal.writeGlyph(11, 20, Overprint.Glyph("#", "#ccc", "#333"));
+// Overwrite a bunch of cells in random positions
+for (let x,y,s=0; s<10; s++) {
+  x = Math.floor(Math.random() * grid.rows) - 1
+  y = Math.floor(Math.random() * grid.cols) - 1
+  grid.writeCell(x, y, Math.random() > 0.5 ? Cells.Sapling : Cells.Tree)
+}
 
 // Re-render the cells that changed since the previous render
-terminal.render();
+grid.render()
 ```
 
 ## Credits

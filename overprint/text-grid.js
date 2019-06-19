@@ -5,8 +5,8 @@ import Cell from "./cell";
 import DisplayState from "./display-state";
 
 const defaultSettings = {
-  width: 40,
-  height: 30,
+  rows: 40,
+  cols: 30,
   font: Font(),
   emptyCell: Cell(),
   isResponsive: false,
@@ -16,8 +16,8 @@ const defaultSettings = {
 class TextGrid {
   constructor(canvas, settings) {
     const _settings = Object.assign(defaultSettings, { ...settings });
-    this._width = _settings.width;
-  	this._height = _settings.height;
+    this._width = _settings.rows;
+  	this._height = _settings.cols;
   	this._font = _settings.font;
   	this._responsive = _settings.isResponsive;
   	this._squared = _settings.forceSquare;
@@ -85,6 +85,14 @@ class TextGrid {
   	this._context.font = this._font.toCSS();
   	this._context.textAlign = 'center';
   	this._context.textBaseline = 'middle';
+  }
+
+  get rows() {
+    return this._width;
+  }
+
+  get cols() {
+    return this._height;
   }
 
   clear() {
