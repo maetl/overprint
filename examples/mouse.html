@@ -10,41 +10,50 @@ canvas.style.padding = '0px';
 document.body.style.margin = '0px';
 document.body.style.padding = '0px';
 
-var terminal = new overprint.Terminal(40, 20, canvas, overprint.Font(), true, true);
+var grid = new overprint.TextGrid(canvas, { width: 40, height: 20});
 
 var activeCell = {x: Infinity, y: Infinity }
 var lineBuffer = null;
 
-var MarkedCell = overprint.Glyph("•", "#000", "#f00");
-var BlankCell = overprint.Glyph(overprint.Char.NULL, "#000", "#fff");
-var CursorCell = overprint.Glyph(overprint.Char.NULL, "#fff", "#000");
+var MarkedCell = overprint.Cell("•", "#000", "#f00");
+var BlankCell = overprint.Cell(overprint.Char.NULL, "#000", "#fff");
+var CursorCell = overprint.Cell(overprint.Char.NULL, "#fff", "#000");
 
-terminal.onClick(function(col, row) {
+grid.onClick(function(col, row) {
   if (!lineBuffer) {
+    grid.clear()
     lineBuffer = {x: col, y: row};
-    terminal.writeGlyph(col, row, MarkedCell);
+    grid.writeCell(col, row, MarkedCell);
   } else {
     var path = line(lineBuffer, {x: col, y: row});
 
     for (point of path) {
-      terminal.writeGlyph(point.x, point.y, MarkedCell);
+      grid.writeCell(point.x, point.y, MarkedCell);
     }
 
     lineBuffer = null;
   }
 
-  terminal.render();
+  grid.render();
 })
 
-terminal.onMouseMove(function(col, row) {
-  if (activeCell.x == col && activeCell.y == row) {
-    terminal.writeGlyph(col, row, BlankCell);
+grid.onMouseMove(function(col, row) {
+  if (lineBuffer) {
+    grid.clear()
+
+    var path = line(lineBuffer, {x: col, y: row});
+
+    for (point of path) {
+      grid.writeCell(point.x, point.y, MarkedCell);
+    }
   } else {
-    terminal.writeGlyph(activeCell.x, activeCell.y, CursorCell);
-    activeCell.x = col
-    activeCell.y = row
+    if (!grid.readCell(row, col) === MarkedCell) {
+      grid.writeCell(activeCell.x, activeCell.y, CursorCell);
+      activeCell.x = col
+      activeCell.y = row
+    }
   }
-  terminal.render();
+  grid.render();
 });
 
 function line(from, to) {
@@ -82,6 +91,6 @@ function line(from, to) {
   return points;
 }
 
-terminal.render();
+grid.render();
 
 </script>

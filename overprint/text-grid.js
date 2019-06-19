@@ -99,6 +99,10 @@ class TextGrid {
     }
   }
 
+  readCell(x, y) {
+    return this._display.getCell(x, y);
+  }
+
   writeCell(x, y, cell) {
     this._display.setCell(x, y, cell);
   }
@@ -122,6 +126,29 @@ class TextGrid {
       const xPos = (x * cellWidth) + cellWidth / 2;
       const yPos = (y * cellHeight) + cellHeight / 2;
       this._context.fillText(cell.character, xPos, yPos);
+    });
+  }
+
+  pxToCell(ev) {
+  	const bounds = this._canvas.getBoundingClientRect();
+  	const relativeX = ev.clientX - bounds.left;
+  	const relativeY = ev.clientY - bounds.top;
+  	const colPos = Math.trunc(relativeX / this._cellWidth * this._ratio);
+  	const rowPos = Math.trunc(relativeY / this._cellHeight * this._ratio);
+  	return [colPos, rowPos];
+  }
+
+  onClick(handler) {
+    this._canvas.addEventListener('click', (ev) => {
+      const cell = this.pxToCell(ev);
+      handler(cell[0], cell[1]);
+    });
+  }
+
+  onMouseMove(handler) {
+    this._canvas.addEventListener('mousemove', (ev) => {
+      const cell = this.pxToCell(ev);
+      handler(cell[0], cell[1]);
     });
   }
 }

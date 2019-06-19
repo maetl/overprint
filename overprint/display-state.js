@@ -59,6 +59,15 @@ class DisplayState {
   	}
   }
 
+  getCell(x, y) {
+    if (x < 0) return;
+  	if (x >= this._width) return;
+  	if (y < 0) return;
+  	if (y >= this._height) return;
+
+    return this._updatedCells[x][y] || this._renderedCells[x][y];
+  }
+
   render(callback) {
   	if (!this._dirty) return;
 
