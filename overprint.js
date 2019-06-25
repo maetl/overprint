@@ -408,8 +408,8 @@ var overprint = (function (exports) {
   }
 
   const defaultSettings = {
-    rows: 40,
-    cols: 30,
+    width: 40,
+    height: 30,
     font: Font$1(),
     emptyCell: Cell(),
     isResponsive: false,
@@ -419,8 +419,8 @@ var overprint = (function (exports) {
   class TextGrid {
     constructor(canvas, settings) {
       const _settings = Object.assign(defaultSettings, { ...settings });
-      this._width = _settings.rows;
-    	this._height = _settings.cols;
+      this._width = _settings.width;
+    	this._height = _settings.height;
     	this._font = _settings.font;
     	this._responsive = _settings.isResponsive;
     	this._squared = _settings.forceSquare;
@@ -490,11 +490,11 @@ var overprint = (function (exports) {
     	this._context.textBaseline = 'middle';
     }
 
-    get rows() {
+    get width() {
       return this._width;
     }
 
-    get cols() {
+    get height() {
       return this._height;
     }
 
