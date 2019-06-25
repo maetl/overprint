@@ -9,6 +9,20 @@ It’s intended to be useful for visualizing discrete simulations, cellular auto
 [![npm](https://img.shields.io/npm/v/overprint.svg)](https://npmjs.org/package/overprint)
 [![travis](https://img.shields.io/travis/maetl/overprint.svg)](https://travis-ci.org/maetl/overprint)
 
+## Install
+
+With NPM CLI:
+
+```
+npm install --save overprint
+```
+
+With Yarn:
+
+```
+yarn add overprint
+```
+
 ## Basic Usage
 
 The following example illustrates the main features of the API.
