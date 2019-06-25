@@ -53,8 +53,8 @@ grid.render()
 
 // Overwrite a bunch of cells in random positions
 for (let x,y,s=0; s<10; s++) {
-  x = Math.floor(Math.random() * grid.rows) - 1
-  y = Math.floor(Math.random() * grid.cols) - 1
+  x = Math.floor(Math.random() * grid.width) - 1
+  y = Math.floor(Math.random() * grid.height) - 1
   grid.writeCell(x, y, Math.random() > 0.5 ? Cells.Sapling : Cells.Tree)
 }
 
