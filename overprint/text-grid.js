@@ -28,10 +28,10 @@ class TextGrid {
   	this._context.font = this._font.toCSS();
 
     this._ratio = window.devicePixelRatio || 1;
+    this._display = new DisplayState(this._width, this._height);
 
     this.resetLayout();
-
-    this._display = new DisplayState(this._width, this._height, this._emptyCell);
+    this.clear();
   }
 
   resetLayout() {

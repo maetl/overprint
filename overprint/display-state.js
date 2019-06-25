@@ -10,13 +10,12 @@ function fillArray2D(width, height, fill) {
 }
 
 class DisplayState {
-  constructor(width, height, emptyCell) {
+  constructor(width, height) {
     this._width = width;
   	this._height = height;
-  	this._emptyCell = emptyCell;
 
-    this._renderedCells = fillArray2D(width, height, emptyCell);
-  	this._updatedCells = fillArray2D(width, height, emptyCell);
+    this._renderedCells = fillArray2D(width, height, null);
+  	this._updatedCells = fillArray2D(width, height, null);
 
   	this._dirty = true;
   }
@@ -48,8 +47,6 @@ class DisplayState {
   	if (x >= this._width) return;
   	if (y < 0) return;
   	if (y >= this._height) return;
-
-  	if (!cell) cell = this._emptyCell;
 
   	if (this._renderedCells[x][y] !== cell) {
   		this._updatedCells[x][y] = cell;
