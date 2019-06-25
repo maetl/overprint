@@ -70,10 +70,11 @@ class DisplayState {
 
   render(callback) {
   	if (!this._dirty) return;
+    let cell;
 
-  	for (var col=0; col<this._width; col++) {
-  		for (var row=0; row<this._height; row++) {
-  			var cell = this._updatedCells[col][row];
+  	for (let col=0; col<this._width; col++) {
+  		for (let row=0; row<this._height; row++) {
+  			cell = this._updatedCells[col][row];
 
   			if (cell == null) continue;
 
