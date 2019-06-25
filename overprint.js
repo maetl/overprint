@@ -86,13 +86,12 @@ var overprint = (function (exports) {
   }
 
   class DisplayState {
-    constructor(width, height, emptyCell) {
+    constructor(width, height) {
       this._width = width;
     	this._height = height;
-    	this._emptyCell = emptyCell;
 
-      this._renderedCells = fillArray2D(width, height, emptyCell);
-    	this._updatedCells = fillArray2D(width, height, emptyCell);
+      this._renderedCells = fillArray2D(width, height, null);
+    	this._updatedCells = fillArray2D(width, height, null);
 
     	this._dirty = true;
     }
@@ -125,8 +124,6 @@ var overprint = (function (exports) {
     	if (y < 0) return;
     	if (y >= this._height) return;
 
-    	if (!cell) cell = this._emptyCell;
-
     	if (this._renderedCells[x][y] !== cell) {
     		this._updatedCells[x][y] = cell;
     		this._dirty = true;
@@ -146,10 +143,11 @@ var overprint = (function (exports) {
 
     render(callback) {
     	if (!this._dirty) return;
+      let cell;
 
-    	for (var col=0; col<this._width; col++) {
-    		for (var row=0; row<this._height; row++) {
-    			var cell = this._updatedCells[col][row];
+    	for (let col=0; col<this._width; col++) {
+    		for (let row=0; row<this._height; row++) {
+    			cell = this._updatedCells[col][row];
 
     			if (cell == null) continue;
 
@@ -433,10 +431,10 @@ var overprint = (function (exports) {
     	this._context.font = this._font.toCSS();
 
       this._ratio = window.devicePixelRatio || 1;
+      this._display = new DisplayState(this._width, this._height);
 
       this.resetLayout();
-
-      this._display = new DisplayState(this._width, this._height, this._emptyCell);
+      this.clear();
     }
 
     resetLayout() {
