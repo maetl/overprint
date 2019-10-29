@@ -4,7 +4,7 @@ export default [
 	{
 		input: 'overprint/overprint.js',
 		output: {
-      name: 'overprint',
+			name: 'overprint',
 			file: pkg.browser,
 			format: 'iife'
 		}

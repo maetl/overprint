@@ -4,7 +4,7 @@
   "description": "A JavaScript toolkit for rendering grids and maps",
   "main": "dist/overprint.cjs.js",
   "module": "dist/overprint.esm.js",
-  "browser": "overprint.js",
+  "browser": "dist/overprint.js",
   "scripts": {
     "build": "rollup -c",
     "test": "ava --verbose"
@@ -17,7 +17,6 @@
     "rollup": "^1.15"
   },
   "files": [
-    "overprint.js",
     "dist",
     "overprint"
   ],
