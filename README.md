@@ -17,12 +17,6 @@ With NPM CLI:
 npm install --save overprint
 ```
 
-With Yarn:
-
-```
-yarn add overprint
-```
-
 ## Basic Usage
 
 The following example illustrates the main features of the API.
