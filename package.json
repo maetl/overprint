@@ -5,6 +5,7 @@
   "main": "dist/overprint.cjs.js",
   "module": "dist/overprint.esm.js",
   "browser": "dist/overprint.js",
+  "unpkg": "dist/overprint.js",
   "scripts": {
     "build": "rollup -c",
     "test": "ava --verbose"
