@@ -5,14 +5,14 @@ export default [
 		input: 'overprint/overprint.js',
 		output: {
 			name: 'overprint',
-			file: pkg.browser,
+			file: pkg.unpkg,
 			format: 'iife'
 		}
 	},
 	{
 		input: 'overprint/overprint.js',
 		output: [
-			{ file: pkg.main, format: 'cjs' },
+			{ file: pkg.browser, format: 'cjs' },
 			{ file: pkg.module, format: 'es' }
 		]
 	}
