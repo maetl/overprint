@@ -87,4 +87,4 @@ Hexgrid.prototype.clear = function(glyph) {
 	}
 }
 
-eport default Hexgrid;
+export default Hexgrid;
