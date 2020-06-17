@@ -13,7 +13,7 @@
   "author": "Mark Rickerby",
   "license": "MIT",
   "devDependencies": {
-    "ava": "^2.1",
+    "ava": "^3.9.0",
     "esm": "^3.2",
     "rollup": "^1.15"
   },
