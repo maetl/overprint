@@ -1,5 +1,5 @@
 import test from 'ava'
-import Font from '../overprint/font'
+import Font from '../src/font'
 
 test('font defaults', t => {
   const font = Font()

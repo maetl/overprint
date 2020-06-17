@@ -1,5 +1,5 @@
 import test from "ava"
-import Cell from "../overprint/cell"
+import Cell from "../src/cell"
 
 test("default empty cell", t => {
   const cell = Cell()

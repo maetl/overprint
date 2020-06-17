@@ -2,7 +2,7 @@ import pkg from './package.json';
 
 export default [
 	{
-		input: 'overprint/overprint.js',
+		input: 'src/overprint.js',
 		output: {
 			name: 'overprint',
 			file: pkg.unpkg,
@@ -10,7 +10,7 @@ export default [
 		}
 	},
 	{
-		input: 'overprint/overprint.js',
+		input: 'src/overprint.js',
 		output: [
 			{ file: pkg.browser, format: 'cjs' },
 			{ file: pkg.module, format: 'es' }
