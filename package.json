@@ -15,13 +15,18 @@
   "devDependencies": {
     "ava": "^3.9.0",
     "esm": "^3.2",
-    "rollup": "^1.15"
+    "jsdom": "^16.2.2",
+    "rollup": "^1.15",
+    "testdouble": "^3.16.0"
   },
   "files": [
     "dist",
     "overprint"
   ],
   "ava": {
+    "files": [
+      "test/**/*.test.js"
+    ],
     "require": [
       "esm"
     ]
