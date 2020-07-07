@@ -1,21 +1,7 @@
-import Char from './char';
-import Color from './color';
-import Cell from './cell';
-import Font from './font';
-import Glyph from './glyph';
-import Terminal from './terminal';
-import BitmapTerminal from './bitmap-terminal';
-import BitmapFont from './bitmap-font';
-import TextGrid from './text-grid';
+import CellularDisplay from "./display/cellular-display.js";
+import MonospaceDisplay from "./display/monospace-display.js";
 
 export {
-  Char,
-  Color,
-  Cell,
-  Font,
-  Glyph,
-  Terminal,
-  BitmapTerminal,
-  BitmapFont,
-  TextGrid
+  CellularDisplay,
+  MonospaceDisplay
 }
