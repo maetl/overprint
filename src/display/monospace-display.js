@@ -1,37 +1,28 @@
-import Char from "./char";
-import Font from "./font";
-import Glyph from "./glyph";
-import Cell from "./cell";
-import DisplayState from "./display-state";
+import CanvasDisplay from "./canvas-display.js";
+import GlyphState from "../state/glyph-state.js";
 
 const defaultSettings = {
-  width: 40,
-  height: 30,
-  font: Font(),
-  emptyCell: Cell(),
-  isResponsive: false,
-  forceSquare: true
+  fontFamily: "monospace",
+  fontSize: 16,
+  fontWeight: "normal"
 }
 
-class TextGrid {
-  constructor(canvas, settings) {
-    const _settings = Object.assign(defaultSettings, { ...settings });
-    this._width = _settings.width;
-  	this._height = _settings.height;
-  	this._font = _settings.font;
-  	this._responsive = _settings.isResponsive;
-  	this._squared = _settings.forceSquare;
-    this._emptyCell = _settings.emptyCell;
+class MonospaceDisplay extends CanvasDisplay {
+  constructor(settings) {
+    const config = { ...defaultSettings, ...settings };
 
-    this._canvas = canvas;
-    this._context = this._canvas.getContext('2d');
-  	this._context.font = this._font.toCSS();
+    super(config);
 
-    this._ratio = window.devicePixelRatio || 1;
-    this._display = new DisplayState(this._width, this._height);
+    this.fontFamily = config.fontFamily;
+    this.fontSize = config.fontSize * this.pixelRatio;
+    this.fontWeight = config.fontWeight;
 
-    this.resetLayout();
-    this.clear();
+    this.context.font = `${this.fontWeight} ${this.fontSize}px ${this.fontFamily}`;
+  	this.context.textAlign = "center";
+  	this.context.textBaseline = "middle";
+
+    // Set up the display state buffer
+    this.glyphs = new GlyphState(this.width, this.height);
   }
 
   resetLayout() {
@@ -87,14 +78,6 @@ class TextGrid {
   	this._context.textBaseline = 'middle';
   }
 
-  get width() {
-    return this._width;
-  }
-
-  get height() {
-    return this._height;
-  }
-
   clear() {
     this.fill(this._emptyCell);
   }
@@ -107,34 +90,35 @@ class TextGrid {
     }
   }
 
-  readCell(x, y) {
-    return this._display.getCell(x, y);
+  writeChar(x, y, char, fg, bg) {
+    this.glyphs.setGlyph(x, y, {char, fg, bg});
   }
 
-  writeCell(x, y, cell) {
-    this._display.setCell(x, y, cell);
+  writeGlyph(x, y, glyph) {
+    this.glyphs.setGlyph(x, y, glyph);
   }
 
-  writeCharacter(x, y, character) {
-    this._display.setCharacter(x, y, character);
-  }
+  print() {
+    if (!this.glyphs.isDirty) return;
 
-  render() {
-    this._display.render((x, y, cell) => {
-      const cellWidth = this._cellWidth;
-      const cellHeight = this._cellHeight;
+    for (const cell of this.glyphs.changed()) {
+      this.context.fillStyle = cell.glyph.bg;
+      this.context.fillRect(
+        cell.x * this.cellWidth,
+        cell.y * this.cellHeight,
+        this.cellWidth,
+        this.cellHeight
+      );
 
-      this._context.fillStyle = cell.backgroundColor;
-      this._context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+      if (!cell.glyph.char) continue;
 
-      if (cell.character == Char.NULL) return;
+      this.context.fillStyle = cell.glyph.fg;
 
-      this._context.fillStyle = cell.foregroundColor;
+      const cx = (cell.x * this.cellWidth) + this.cellWidth / 2;
+      const cy = (cell.y * this.cellHeight) + this.cellHeight / 2;
 
-      const xPos = (x * cellWidth) + cellWidth / 2;
-      const yPos = (y * cellHeight) + cellHeight / 2;
-      this._context.fillText(cell.character, xPos, yPos);
-    });
+      this.context.fillText(cell.glyph.char, cx, cy);
+    }
   }
 
   pxToCell(ev) {
@@ -161,4 +145,4 @@ class TextGrid {
   }
 }
 
-export default TextGrid;
+export default MonospaceDisplay;

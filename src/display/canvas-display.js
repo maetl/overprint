@@ -1,5 +1,3 @@
-import CellState from "./cell-state.js";
-
 const defaultSettings = {
   el: null,
   canvas: null,
@@ -9,7 +7,7 @@ const defaultSettings = {
   cellHeight: 20
 }
 
-class CellularGrid {
+class CanvasDisplay {
   constructor(settings) {
     const config = { ...defaultSettings, ...settings };
 
@@ -56,28 +54,7 @@ class CellularGrid {
 
     // Set up the drawing context
     this.context = this.canvas.getContext('2d');
-
-    // Set up the rendering buffer
-    this.cells = new CellState(this.width, this.height);
-  }
-
-  writeCell(x, y, fill) {
-    this.cells.setCell(x, y, fill);
-  }
-
-  print() {
-    if (!this.cells.isDirty) return;
-
-    for (const cell of this.cells.changed()) {
-      this.context.fillStyle = cell.fill;
-      this.context.fillRect(
-        cell.x * this.cellWidth,
-        cell.y * this.cellHeight,
-        this.cellWidth,
-        this.cellHeight
-      );
-    }
   }
 }
 
-export default CellularGrid;
+export default CanvasDisplay;

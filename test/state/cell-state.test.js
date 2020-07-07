@@ -1,5 +1,5 @@
 import test from "ava";
-import CellState from "../src/cell-state";
+import CellState from "../../src/state/cell-state";
 
 test("isDirty on initialize", t => {
   const state = new CellState(30, 20);
