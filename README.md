@@ -1,5 +1,7 @@
 # Overprint
 
+⚠️ **Current release branch has a number of breaking API changes and updates to support JS modules as the default package format. v0.9 on NPM is safe to use for now but don’t expect what’s documented here to work with the latest changes.**
+
 Overprint is a minimalist toolkit for rendering cell grids and tile maps using the [HTML Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
 It’s intended to be useful for visualizing discrete simulations, cellular automata, abstract/fantasy procedural map generation and 2D game development with an old-school flavour.
