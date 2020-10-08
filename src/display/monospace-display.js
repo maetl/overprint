@@ -17,9 +17,14 @@ class MonospaceDisplay extends CanvasDisplay {
     this.fontSize = config.fontSize * this.pixelRatio;
     this.fontWeight = config.fontWeight;
 
-    this.context.font = `${this.fontWeight} ${this.fontSize}px ${this.fontFamily}`;
+    this.context.font = `${this.fontWeight} ${this.fontSize}px/${this.fontSize}px ${this.fontFamily}`;
   	this.context.textAlign = "center";
+
+    // Vertical placement from middle of box
   	this.context.textBaseline = "middle";
+
+    // Vertical placement from bottom of box
+  	//this.context.textBaseline = "bottom";
 
     // Set up the display state buffer
     this.glyphs = new GlyphState(this.width, this.height);
@@ -90,12 +95,34 @@ class MonospaceDisplay extends CanvasDisplay {
     }
   }
 
+  writeCell(x, y, fill) {
+    this.glyphs.setGlyph(x, y, {char: "", fg: null, bg: fill});
+  }
+
   writeChar(x, y, char, fg, bg) {
     this.glyphs.setGlyph(x, y, {char, fg, bg});
   }
 
   writeGlyph(x, y, glyph) {
     this.glyphs.setGlyph(x, y, glyph);
+  }
+
+  writeText(x, y, text, fg, bg) {
+    for (let cursor=x; cursor < text.length + x; cursor++) {
+      this.writeChar(cursor, y, text[cursor - x], fg, bg);
+    }
+  }
+
+  writeTextTo(x, y, text, fg, bg) {
+    this.writeText(x - text.length + 1, y, text, fg, bg);
+  }
+
+  writeTextAround(x, y, text, fg, bg) {
+    this.writeText(x - Math.round((text.length - 1) / 2), y, text, fg, bg)
+  }
+
+  writeTextCentered(x, y, text, fg, bg) {
+    this.writeText(this.width / 2 - Math.round((text.length - 1) / 2), y, text, fg, bg)
   }
 
   print() {
@@ -114,8 +141,14 @@ class MonospaceDisplay extends CanvasDisplay {
 
       this.context.fillStyle = cell.glyph.fg;
 
+
       const cx = (cell.x * this.cellWidth) + this.cellWidth / 2;
-      const cy = (cell.y * this.cellHeight) + this.cellHeight / 2;
+
+      // Vertical placement from middle of box
+      //const cy = (cell.y * this.cellHeight) + this.cellHeight / 2;
+      //
+      // Vertical placement from bottom of box
+      const cy = (cell.y * this.cellHeight) + this.fontSize / 1.8;
 
       this.context.fillText(cell.glyph.char, cx, cy);
     }
