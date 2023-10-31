@@ -47,8 +47,12 @@ class DisplayState {
   	if (x >= this._width) return;
   	if (y < 0) return;
   	if (y >= this._height) return;
+    if (cell == undefined) return;
 
-  	if (this._renderedCells[x][y] !== cell) {
+    if (this._renderedCells[x][y] == null ||
+      (this._renderedCells[x][y].character != cell.character ||
+      this._renderedCells[x][y].foregroundColor != cell.foregroundColor ||
+      this._renderedCells[x][y].backgroundColor != cell.backgroundColor)) {
   		this._updatedCells[x][y] = cell;
   		this._dirty = true;
   	} else {

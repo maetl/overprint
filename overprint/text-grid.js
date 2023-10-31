@@ -1,6 +1,5 @@
 import Char from "./char";
 import Font from "./font";
-import Glyph from "./glyph";
 import Cell from "./cell";
 import DisplayState from "./display-state";
 
@@ -23,8 +22,10 @@ class TextGrid {
   	this._squared = _settings.forceSquare;
     this._emptyCell = _settings.emptyCell;
 
+    this._glyphCache = new Map();
+
     this._canvas = canvas;
-    this._context = this._canvas.getContext('2d');
+    this._context = this._canvas.getContext('2d', { willReadFrequently: true });
   	this._context.font = this._font.toCSS();
 
     this._ratio = window.devicePixelRatio || 1;
@@ -68,8 +69,8 @@ class TextGrid {
   			textWidth = textHeight = Math.max(textWidth, textHeight);
   		}
 
-  		this._cellWidth = textWidth * this._ratio;
-  		this._cellHeight = textHeight * this._ratio;
+  		this._cellWidth = Math.ceil(textWidth * this._ratio);
+  		this._cellHeight = Math.ceil(textHeight * this._ratio);
 
   		const drawWidth = textWidth * this._width;
   		const drawHeight = textHeight * this._height;
@@ -85,6 +86,8 @@ class TextGrid {
   	this._context.font = this._font.toCSS();
   	this._context.textAlign = 'center';
   	this._context.textBaseline = 'middle';
+
+    this._cellCache = new Map();
   }
 
   get width() {
@@ -123,17 +126,25 @@ class TextGrid {
     this._display.render((x, y, cell) => {
       const cellWidth = this._cellWidth;
       const cellHeight = this._cellHeight;
+      const blitKey = `${cell.character};${cell.foregroundColor};${cell.backgroundColor}`;
 
-      this._context.fillStyle = cell.backgroundColor;
-      this._context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+      if (this._cellCache.has(blitKey)) {
+        this._context.putImageData(this._cellCache.get(blitKey), x * cellWidth, y * cellHeight);
+      } else {
+        this._context.fillStyle = cell.backgroundColor;
+        this._context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 
-      if (cell.character == Char.NULL) return;
+        if (cell.character == Char.NULL) return;
 
-      this._context.fillStyle = cell.foregroundColor;
+        this._context.fillStyle = cell.foregroundColor;
 
-      const xPos = (x * cellWidth) + cellWidth / 2;
-      const yPos = (y * cellHeight) + cellHeight / 2;
-      this._context.fillText(cell.character, xPos, yPos);
+        const xPos = (x * cellWidth) + cellWidth / 2;
+        const yPos = (y * cellHeight) + cellHeight / 2;
+        this._context.fillText(cell.character, Math.round(xPos), Math.round(yPos));
+
+        const blitCell = this._context.getImageData(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+        this._cellCache.set(blitKey, blitCell);
+      }
     });
   }
 
